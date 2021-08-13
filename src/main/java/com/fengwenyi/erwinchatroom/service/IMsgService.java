@@ -1,4 +1,4 @@
-package com.fengwenyi.demospringbootwebsocket.service;
+package com.fengwenyi.erwinchatroom.service;
 
 /**
  * @author Wenyi Feng

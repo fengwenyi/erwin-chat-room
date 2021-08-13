@@ -1,4 +1,4 @@
-package com.fengwenyi.demospringbootwebsocket.domain;
+package com.fengwenyi.erwinchatroom.domain;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

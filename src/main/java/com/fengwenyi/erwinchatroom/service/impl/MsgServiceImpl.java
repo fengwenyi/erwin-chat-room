@@ -1,14 +1,13 @@
-package com.fengwenyi.demospringbootwebsocket.service.impl;
+package com.fengwenyi.erwinchatroom.service.impl;
 
 import com.fengwenyi.api.result.ResultTemplate;
-import com.fengwenyi.demospringbootwebsocket.domain.UserModel;
 import com.fengwenyi.demospringbootwebsocket.enums.MsgTypeEnum;
-import com.fengwenyi.demospringbootwebsocket.service.BaseMsg;
-import com.fengwenyi.demospringbootwebsocket.service.IMsgService;
-import com.fengwenyi.demospringbootwebsocket.service.IUserService;
 import com.fengwenyi.demospringbootwebsocket.vo.ResponseVo;
+import com.fengwenyi.erwinchatroom.domain.UserModel;
+import com.fengwenyi.erwinchatroom.service.BaseMsg;
+import com.fengwenyi.erwinchatroom.service.IMsgService;
+import com.fengwenyi.erwinchatroom.utils.UserUtils;
 import com.fengwenyi.javalib.convert.JsonUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -21,13 +20,10 @@ import java.util.List;
 @Service
 public class MsgServiceImpl extends BaseMsg implements IMsgService {
 
-    @Autowired
-    private IUserService userService;
-
     @Override
     public boolean sendMsg(String id, String message) {
 
-        UserModel userModel = userService.queryById(id);
+        UserModel userModel = UserUtils.queryById(id);
 
         ResultTemplate<ResponseVo> result = ResultTemplate.success(
                 new ResponseVo()
@@ -46,8 +42,8 @@ public class MsgServiceImpl extends BaseMsg implements IMsgService {
     @Override
     public boolean sendMsgAll(String senderId, String message) {
 
-        List<UserModel> userModelList = userService.queryAll();
-        UserModel sendUserModel = userService.queryById(senderId);
+        List<UserModel> userModelList = UserUtils.queryAll();
+        UserModel sendUserModel = UserUtils.queryById(senderId);
 
         ResultTemplate<ResponseVo> result = ResultTemplate.success(
                 new ResponseVo()
@@ -68,7 +64,7 @@ public class MsgServiceImpl extends BaseMsg implements IMsgService {
 
     @Override
     public void sendBroadcast(String message) {
-        List<UserModel> userModelList = userService.queryAll();
+        List<UserModel> userModelList = UserUtils.queryAll();
 
         ResultTemplate<ResponseVo> result = ResultTemplate.success(
                 new ResponseVo()

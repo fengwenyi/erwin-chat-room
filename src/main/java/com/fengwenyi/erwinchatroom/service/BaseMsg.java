@@ -1,4 +1,6 @@
-package com.fengwenyi.demospringbootwebsocket.service;
+package com.fengwenyi.erwinchatroom.service;
+
+import org.springframework.web.socket.WebSocketSession;
 
 import javax.websocket.Session;
 import java.io.IOException;
@@ -12,6 +14,7 @@ public class BaseMsg {
             throws IOException
     {
         session.getBasicRemote().sendText(message);
+        WebSocketSession webSocketSession;
     }
 
 }
