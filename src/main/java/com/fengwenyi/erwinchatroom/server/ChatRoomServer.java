@@ -51,15 +51,14 @@ public class ChatRoomServer {
                 MsgUtils.sendAllUserUpLine(userChatRoomModel);
 
                 // 给新用户推所有人
-                MsgUtils.sendUserOnLineUserList(userChatRoomModel);
             } else {
                 UserChatRoomUtils.updateByUid(
                         userChatRoomModel
                                 .setSession(session)
                                 .setTime(LocalDateTime.now()));
                 // 说明是刷新，只给一个人推送列表
-                MsgUtils.sendUserOnLineUserList(userChatRoomModel);
             }
+            MsgUtils.sendUserOnLineUserList(userChatRoomModel);
         }
     }
 
@@ -71,6 +70,7 @@ public class ChatRoomServer {
     @OnClose
     public void close(Session session, @PathParam("uid") String uid) {
 
+        UserChatRoomUtils.deleteByUid(uid);
     }
 
     @OnError
