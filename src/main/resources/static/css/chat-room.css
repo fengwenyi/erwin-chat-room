@@ -87,6 +87,7 @@
     padding: 10px;
     border-radius: 5px;
     max-width: 300px;
+    word-break: break-all;
 }
 
 .right-chat-container {
