@@ -1,21 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>聊天室</title>
     <link rel="stylesheet" href="/static/lib/layui/css/layui.css">
     <link rel="stylesheet" href="/static/css/chat-room.css">
     <script src="/static/lib/layui/layui.js"></script>
+    <script th:inline="javascript">
+        let error = [[${error}]];
+        let msg = [[${msg}]];
+
+        if (error) {
+            layer.alert(
+                msg, {icon: 5},
+                function () {
+                    window.location.href = "/";
+                });
+        }
+    </script>
     <script src="/static/js/chat-room.js"></script>
 </head>
 <body>
-    <div class="main-container">
-        <div class="left-container"></div>
-        <div class="right-container"></div>
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-side layui-bg-black">
+        <ul class="users-container" id="users-container">
+            <!--<li class="user-container">
+                <div class="nickname">张三</div>
+                <div class="time">01:31:00</div>
+            </li>-->
+        </ul>
     </div>
-    <div class="input-container">
-        <textarea></textarea>
-        <button>发送</button>
+
+    <div class="layui-body">
+        <div class="broadcast-container" id="message-broadcast"></div>
+
+        <div class="conn-container" id="message-conn"></div>
+
+        <ul class="chats-container" id="chats-container">
+            <!--<li class="chat-container left-chat-container">
+                <div class="left">
+                    <div class="user-header">
+                        <div class="img">张</div>
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="user-nickname">张三</div>
+                    <div class="user-message">
+                        <div class="content">Hello，你好</div>
+                        <div class="bubble"></div>
+                    </div>
+                </div>
+            </li>-->
+            <!--<li class="chat-container right-chat-container">
+                <div class="right">
+                    <div class="user-header">
+                        <div class="img"></div>
+                    </div>
+                </div>
+                <div class="left">
+                    <div class="user-message">
+                        <div class="content">Hello，你好</div>
+                        <div class="bubble"></div>
+                    </div>
+                </div>
+            </li>-->
+            <!--<li class="chat-container center-chat-container">
+                <div class="time">05:30:32</div>
+            </li>-->
+        </ul>
+
+        <div class="form-container">
+            <form class="layui-form" action="">
+                <input type="text" name="message" required lay-verify="required" autocomplete="off" class="layui-input">
+                <button class="layui-btn" lay-submit lay-filter="formSend">发送</button>
+            </form>
+        </div>
     </div>
+</div>
 </body>
 </html>

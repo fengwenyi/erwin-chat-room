@@ -1,7 +1,9 @@
 package com.fengwenyi.erwinchatroom.utils;
 
 import com.fengwenyi.erwinchatroom.domain.UserModel;
+import com.fengwenyi.erwinchatroom.enums.UserStatusEnum;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,21 +18,30 @@ public class UserUtils {
 
     private static final ConcurrentMap<String, UserModel> map = new ConcurrentHashMap<>();
 
-
-    public static void add(UserModel userModel) {
-        map.put(userModel.getId(), userModel);
+    public static void add(UserModel model) {
+        map.put(model.getUid(), model);
     }
 
     public static List<UserModel> queryAll() {
         return new ArrayList<>(map.values());
     }
 
-    public static UserModel queryById(String id) {
-        return map.get(id);
+    public static UserModel queryByUid(String uid) {
+        return map.get(uid);
     }
 
-    public static void deleteById(String id) {
-        map.remove(id);
+    public static void deleteByUid(String uid) {
+        map.remove(uid);
+    }
+
+    public static void updateStatusByUid(String uid, UserStatusEnum userStatusEnum) {
+        UserModel userModel = queryByUid(uid);
+        userModel.setStatus(userStatusEnum).setUpdateTime(LocalDateTime.now());
+        updateByUid(userModel);
+    }
+
+    public static void updateByUid(UserModel model) {
+        map.put(model.getUid(), model);
     }
 
 }

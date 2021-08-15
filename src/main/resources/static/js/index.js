@@ -8,17 +8,13 @@ layui.use(function() {
         ,util = layui.util
         ,jQuery = layui.jquery;
 
-
-    jQuery("#inputAuthor").val('<a href="https://fengwenyi.com">Erwin Feng</a>')
-
-
     //监听提交
-    form.on('submit(formDemo)', function(data){
+    form.on('submit(formEnter)', function(data){
         //console.log(JSON.stringify(data.field));
         let layerIndex;
         jQuery.ajax({
-            url: "/code-generator",
-            type:'post',
+            url: "/business/register",
+            type: 'POST',
             // 请求的媒体类型
             contentType: "application/json;charset=UTF-8",
             data: JSON.stringify(data.field),
@@ -27,7 +23,9 @@ layui.use(function() {
             },
             success:function(response){
                 if(response.success){
-                    layer.alert(response.msg, { icon: 6 });
+                    //layer.alert(response.msg, { icon: 6 });
+                    let uid = response.body.uid
+                    window.location.href = '/chat-room/' + uid
                 }else{
                     layer.alert(response.msg,{ icon: 5 });//失败的表情
                 }
@@ -38,5 +36,7 @@ layui.use(function() {
         });
         return false;
     });
+
+
 
 });

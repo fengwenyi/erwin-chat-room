@@ -1,16 +1,20 @@
 package com.fengwenyi.erwinchatroom.server;
 
+import com.fengwenyi.erwinchatroom.constant.Message;
+import com.fengwenyi.erwinchatroom.domain.UserChatRoomModel;
 import com.fengwenyi.erwinchatroom.domain.UserModel;
-import com.fengwenyi.erwinchatroom.service.impl.MsgServiceImpl;
+import com.fengwenyi.erwinchatroom.enums.UserStatusEnum;
+import com.fengwenyi.erwinchatroom.utils.MsgUtils;
+import com.fengwenyi.erwinchatroom.utils.UserChatRoomUtils;
 import com.fengwenyi.erwinchatroom.utils.UserUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.WebSocketSession;
-import org.springframework.web.socket.server.standard.SpringConfigurator;
 
 import javax.websocket.*;
+import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -18,55 +22,55 @@ import java.util.Objects;
  * @since 2021-08-12
  */
 @Component
-@ServerEndpoint(value = "/chat-room")
+@ServerEndpoint(value = "/chat-room/{uid}")
 @Slf4j
-public class ChatRoomServer extends MsgServiceImpl {
-
-    private String sessionId;
-
-    private String oldSessionId;
+public class ChatRoomServer {
 
     @OnOpen
-    public void open(WebSocketSession session) {
-
-        //session.setMaxIdleTimeout(-1);
-
-        UserModel userModel = UserUtils.queryById(session.getId());
+    public void open(Session session, @PathParam("uid") String uid) {
+        UserModel userModel = UserUtils.queryByUid(uid);
         if (Objects.nonNull(userModel)) {
-            sessionId = oldSessionId;
-        } else {
-            sessionId = session.getId();
-            userModel = new UserModel()
-                    .setId(session.getId())
-                    //.setUsername(username)
-                    //.setSession(session)
-                    ;
-            UserUtils.add(userModel);
+            UserChatRoomModel userChatRoomModel = UserChatRoomUtils.queryByUid(uid);
+            if (Objects.isNull(userChatRoomModel)) {
+                UserChatRoomUtils.add(
+                        new UserChatRoomModel()
+                                .setUid(uid)
+                                .setNickname(userModel.getNickname())
+                                .setSession(session)
+                                .setTime(LocalDateTime.now()));
+
+                UserUtils.updateStatusByUid(uid, UserStatusEnum.ONLINE);
+
+                // 欢迎 xxx 用户加入聊天室
+                String message = String.format(Message.CONN, userModel.getNickname());
+
+                MsgUtils.sendConn(message);
+
+                // 有新用户上线，给所有人推送
+                userChatRoomModel = UserChatRoomUtils.queryByUid(uid);
+                MsgUtils.sendAllUserUpLine(userChatRoomModel);
+
+                // 给新用户推所有人
+                MsgUtils.sendUserOnLineUserList(userChatRoomModel);
+            } else {
+                UserChatRoomUtils.updateByUid(
+                        userChatRoomModel
+                                .setSession(session)
+                                .setTime(LocalDateTime.now()));
+                // 说明是刷新，只给一个人推送列表
+                MsgUtils.sendUserOnLineUserList(userChatRoomModel);
+            }
         }
-
-        // 欢迎 xxx 用户加入聊天室
-        String message = String.format("欢迎 %s 用户加入聊天室", session.getId());
-        //sendBroadcast(message);
-
     }
 
     @OnMessage
-    public void message(Session session, String message) {
-        sendMsgAll(session.getId(), message);
+    public void message(@PathParam("uid") String uid, String message) {
+        MsgUtils.sendAll(uid, message);
     }
 
     @OnClose
-    public void close(Session session) {
+    public void close(Session session, @PathParam("uid") String uid) {
 
-        oldSessionId = sessionId;
-
-        // xxx 用户离开了聊天室
-        UserModel userModel = UserUtils.queryById(session.getId());
-        String message = String.format("%s 用户离开了聊天室", userModel.getUsername());
-
-        UserUtils.deleteById(session.getId());
-
-        sendBroadcast(message);
     }
 
     @OnError
