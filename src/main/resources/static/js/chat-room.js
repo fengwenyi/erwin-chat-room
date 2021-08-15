@@ -7,6 +7,8 @@ layui.use(function() {
         ,util = layui.util
         ,jQuery = layui.jquery;
 
+    let host = window.location.host;
+
     let uid = getUid();
 
     let headImgNo = 0;
@@ -19,7 +21,7 @@ layui.use(function() {
         //console.log("您的浏览器支持WebSocket");
 
         //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
-        socket = new WebSocket("ws://localhost:8080/chat-room/" + uid);
+        socket = new WebSocket("wss://" + host + "/chat-room/" + uid);
         //打开事件
         socket.onopen = function () {
         };
