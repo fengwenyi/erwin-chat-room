@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.fengwenyi</groupId>
     <artifactId>erwin-chat-room</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-BUILD</version>
     <name>erwin-chat-room</name>
     <description>erwin-chat-room</description>
     <properties>

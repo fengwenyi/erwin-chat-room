@@ -21,8 +21,8 @@ import java.util.Objects;
  * @author <a href="https://www.fengwenyi.com">Erwin Feng</a>
  * @since 2021-08-12
  */
-@Component
-@ServerEndpoint(value = "/chat-room/{uid}")
+//@Component
+//@ServerEndpoint(value = "/chat-room/{uid}")
 @Slf4j
 public class ChatRoomServer {
 
