@@ -16,7 +16,11 @@ import java.util.Map;
 public class ChatRoomInterceptor implements HandshakeInterceptor {
     @Override
     public boolean beforeHandshake(ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse, WebSocketHandler webSocketHandler, Map<String, Object> map) throws Exception {
-        return false;
+
+
+
+
+        return true;
     }
 
     @Override

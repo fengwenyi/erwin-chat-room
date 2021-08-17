@@ -26,8 +26,8 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry
-                .addHandler(chatRoomWeSocketHandler, "")
-                .addInterceptors(chatRoomInterceptor)
+                .addHandler(chatRoomWeSocketHandler, "ws")
+                //.addInterceptors(chatRoomInterceptor)
                 .setAllowedOrigins("*");
     }
 
