@@ -28,4 +28,6 @@ public class UserEntity {
     private LocalDateTime updateTime;
 
     private LocalDateTime loginTime;
+
+    private Boolean register;
 }

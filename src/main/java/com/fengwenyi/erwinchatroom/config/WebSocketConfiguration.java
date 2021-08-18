@@ -1,14 +1,13 @@
 package com.fengwenyi.erwinchatroom.config;
 
-import com.fengwenyi.erwinchatroom.handler.ChatRoomWeSocketHandler;
+import com.fengwenyi.erwinchatroom.handler.ChatWeSocketHandler;
+import com.fengwenyi.erwinchatroom.handler.RoomWeSocketHandler;
 import com.fengwenyi.erwinchatroom.interceptor.ChatRoomInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
-import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 /**
  * @author <a href="https://www.fengwenyi.com">Erwin Feng</a>
@@ -18,17 +17,33 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 @EnableWebSocket
 public class WebSocketConfiguration implements WebSocketConfigurer {
 
-    @Autowired
-    private ChatRoomWeSocketHandler chatRoomWeSocketHandler;
-    @Autowired
+    private ChatWeSocketHandler chatWeSocketHandler;
+
+    private RoomWeSocketHandler roomWeSocketHandler;
+
     private ChatRoomInterceptor chatRoomInterceptor;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry
-                .addHandler(chatRoomWeSocketHandler, "ws")
-                //.addInterceptors(chatRoomInterceptor)
+        registry.addHandler(roomWeSocketHandler, "/room")
+                .addInterceptors(chatRoomInterceptor)
                 .setAllowedOrigins("*");
+
+        registry.addHandler(chatWeSocketHandler, "/chat").withSockJS();
     }
 
+    @Autowired
+    public void setChatWeSocketHandler(ChatWeSocketHandler chatWeSocketHandler) {
+        this.chatWeSocketHandler = chatWeSocketHandler;
+    }
+
+    @Autowired
+    public void setRoomWeSocketHandler(RoomWeSocketHandler roomWeSocketHandler) {
+        this.roomWeSocketHandler = roomWeSocketHandler;
+    }
+
+    @Autowired
+    public void setChatRoomInterceptor(ChatRoomInterceptor chatRoomInterceptor) {
+        this.chatRoomInterceptor = chatRoomInterceptor;
+    }
 }

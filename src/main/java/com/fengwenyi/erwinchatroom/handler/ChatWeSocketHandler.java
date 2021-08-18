@@ -19,7 +19,7 @@ import java.util.Map;
  */
 @Component
 @Slf4j
-public class ChatRoomWeSocketHandler extends TextWebSocketHandler {
+public class ChatWeSocketHandler extends TextWebSocketHandler {
 
     @Autowired
     private IUserRepository userRepository;
@@ -33,7 +33,7 @@ public class ChatRoomWeSocketHandler extends TextWebSocketHandler {
         Object rid = attributes.get("rid");
 
         log.info(message.getPayload());
-        log.info(session.getId());
+        log.info("sessionId={}", session.getId());
         //log.info();
 
         UserEntity userEntity = new UserEntity().setUid(IdUtils.genId()).setNickname(message.getPayload());
