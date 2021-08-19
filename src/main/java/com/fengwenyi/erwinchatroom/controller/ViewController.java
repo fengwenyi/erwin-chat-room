@@ -1,8 +1,10 @@
 package com.fengwenyi.erwinchatroom.controller;
 
 import com.fengwenyi.erwinchatroom.domain.UserModel;
+import com.fengwenyi.erwinchatroom.service.IUserService;
 import com.fengwenyi.erwinchatroom.utils.UserUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,13 +22,20 @@ import java.util.Objects;
 @Slf4j
 public class ViewController {
 
+    @Autowired
+    private IUserService userService;
+
     @GetMapping("/")
     public String index(Model model, HttpSession session, HttpServletResponse response) {
-        String uid = session.getId();
-        UserModel userModel = UserUtils.queryByUid(uid);
+        session.setMaxInactiveInterval(-1);
+        String sessionId = session.getId();
+
+        userService.init(sessionId);
+
+        /*UserModel userModel = UserUtils.queryByUid(uid);
         if (Objects.nonNull(userModel)) {
             model.addAttribute("nickname", userModel.getNickname());
-        }
+        }*/
 
         // 解决浏览器后退不能自动刷新问题
         response.setHeader("Pragma","no-cache");

@@ -13,8 +13,8 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
  * @author <a href="https://www.fengwenyi.com">Erwin Feng</a>
  * @since 2021-08-12
  */
-@Configuration
-@EnableWebSocket
+//@Configuration
+//@EnableWebSocket
 public class WebSocketConfiguration implements WebSocketConfigurer {
 
     private ChatWeSocketHandler chatWeSocketHandler;
