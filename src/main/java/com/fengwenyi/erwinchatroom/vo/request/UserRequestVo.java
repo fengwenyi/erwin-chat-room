@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 @Accessors(chain = true)
 public class UserRequestVo {
 
-    @NotBlank(message = "用户昵称不能为空")
+    @NotBlank(message = "用户ID不能为空")
     private String uid;
 
     @NotBlank(message = "用户昵称不能为空")
