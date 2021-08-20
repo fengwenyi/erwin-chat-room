@@ -7,11 +7,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -26,9 +31,29 @@ public class ViewController {
     private IUserService userService;
 
     @GetMapping("/")
-    public String index(Model model, HttpSession session, HttpServletResponse response) {
+    public String index(Model model, HttpSession session, HttpServletResponse response, HttpServletRequest request) {
         session.setMaxInactiveInterval(-1);
         String sessionId = session.getId();
+
+        Cookie[] cookies = request.getCookies();
+        if (Objects.isNull(cookies) || cookies.length == 0) {
+            //
+            Cookie uidCookie = new Cookie("uid", sessionId);
+            response.addCookie(uidCookie);
+        } else {
+            String uid = null;
+            for (Cookie cookie : cookies) {
+                String name = cookie.getName();
+                if (StringUtils.hasText(name) && name.equals("uid")) {
+                    uid = cookie.getValue();
+                    break;
+                }
+            }
+            if (!StringUtils.hasText(uid)) {
+                Cookie uidCookie = new Cookie("uid", sessionId);
+                response.addCookie(uidCookie);
+            }
+        }
 
         userService.init(sessionId);
 
