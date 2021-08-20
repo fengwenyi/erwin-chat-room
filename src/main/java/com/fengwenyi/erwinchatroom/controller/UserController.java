@@ -3,13 +3,11 @@ package com.fengwenyi.erwinchatroom.controller;
 import com.fengwenyi.api.result.ResultTemplate;
 import com.fengwenyi.erwinchatroom.service.IUserService;
 import com.fengwenyi.erwinchatroom.vo.request.UserInitRequestVo;
+import com.fengwenyi.erwinchatroom.vo.request.UserRequestVo;
 import com.fengwenyi.erwinchatroom.vo.response.UserInitResponseVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author <a href="https://www.fengwenyi.com">Erwin Feng</a>
@@ -26,6 +24,17 @@ public class UserController {
     @PostMapping("/init")
     public ResultTemplate<UserInitResponseVo> init(@RequestBody UserInitRequestVo requestVo) {
         return userService.init(requestVo);
+    }
+
+    @PostMapping("/update")
+    public ResultTemplate<Void> update(@RequestBody @Validated UserRequestVo requestVo) {
+        return userService.updateUser(requestVo);
+    }
+
+    @GetMapping("/test")
+    public ResultTemplate<?> test() throws Exception {
+        //int i = 1 / 0;
+        throw new Exception("1111");
     }
 
 }

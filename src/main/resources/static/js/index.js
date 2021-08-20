@@ -7,6 +7,41 @@ layui.use(function () {
         , util = layui.util
         , jQuery = layui.jquery;
 
+
+    userInit();
+    userNickname();
+
+    // 监听点击修改昵按钮
+    jQuery('#btn-set-nickname').on('click', function () {
+        let nickname = getNickname();
+        if (isNotEmpty(nickname)) {
+            jQuery('input[name=nickname]').val(nickname);
+        }
+        layer.open({
+            type: 1,
+            title: '设置',
+            closeBtn: 1, //不显示关闭按钮
+            anim: 5,
+            shade: [0.5],
+            area: ['', ''],
+            shadeClose: true, //开启遮罩关闭
+            content: jQuery('.box-update-user')
+        });
+    });
+
+    // 监听创建房间按钮
+    jQuery('#btn-create-room').on('click', function () {
+        let nickname = getNickname();
+        if (isEmpty(nickname)) {
+            alertFail(layer, "请先设置昵称")
+        }
+    });
+
+    form.on('submit(formUpdateUser)', function (data) {
+        userSetNickname(data.field.nickname)
+        return false;
+    });
+
     //监听提交
     form.on('submit(formEnter)', function (data) {
         //console.log(JSON.stringify(data.field));
@@ -35,8 +70,6 @@ layui.use(function () {
         });
         return false;
     });
-
-    userInit();
 
     let sessionId;
 
@@ -112,14 +145,38 @@ layui.use(function () {
         if (isEmpty(uid)) {
             uid = ''
         }
-        let data = {'uid': uid};
-        ajaxPost(jQuery, layer, "/user/init", JSON.stringify(data), function (response) {
+        let user = { uid : uid};
+        ajaxPost(jQuery, layer, "/user/init", JSON.stringify(user), function (response) {
             if (response.success) {
                 if (isNotEmpty(response.body.uid)) {
                     setUid(response.body.uid)
                 }
             } else {
                 console.error('user init error : ' + response.msg)
+            }
+        })
+    }
+
+    function userNickname() {
+        let nickname = getNickname();
+        if (isNotEmpty(nickname)) {
+            jQuery('#nickname').html(nickname);
+            jQuery('.icon-update-name').css('display', 'block');
+        }
+    }
+
+    function userSetNickname(nickname) {
+        let uid = getUid();
+        let user = {};
+        user.uid = uid;
+        user.nickname = nickname;
+        ajaxPost(jQuery, layer, "/user/update", JSON.stringify(user), function (response) {
+            if (response.success) {
+                setNickname(nickname)
+                userNickname();
+                alertSuccess(layer, response.msg)
+            } else {
+                alertFail(layer, response.msg)
             }
         })
     }

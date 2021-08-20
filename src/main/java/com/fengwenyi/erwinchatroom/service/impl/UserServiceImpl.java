@@ -5,6 +5,7 @@ import com.fengwenyi.erwinchatroom.entity.UserEntity;
 import com.fengwenyi.erwinchatroom.repository.IUserRepository;
 import com.fengwenyi.erwinchatroom.service.IUserService;
 import com.fengwenyi.erwinchatroom.vo.request.UserInitRequestVo;
+import com.fengwenyi.erwinchatroom.vo.request.UserRequestVo;
 import com.fengwenyi.erwinchatroom.vo.response.UserInitResponseVo;
 import com.fengwenyi.javalib.generate.IdUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,5 +53,15 @@ public class UserServiceImpl implements IUserService {
         UserInitResponseVo responseVo = new UserInitResponseVo().setUid(uid);
 
         return ResultTemplate.success(responseVo);
+    }
+
+    @Override
+    public ResultTemplate<Void> updateUser(UserRequestVo requestVo) {
+        UserEntity userEntity = userRepository.findById(requestVo.getUid()).orElse(null);
+        if (Objects.isNull(userEntity)) {
+            return ResultTemplate.fail("用户查询失败");
+        }
+        userRepository.save(userEntity.setNickname(requestVo.getNickname()).setUpdateTime(LocalDateTime.now()));
+        return ResultTemplate.success();
     }
 }

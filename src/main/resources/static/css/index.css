@@ -16,29 +16,72 @@
     bottom: 0;
     margin: auto;
 }
-.layui-form {
+/*.layui-form {
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
-}
-.layui-btn {
+}*/
+/*.layui-btn {
     margin-left: 10px;
-}
+}*/
 
 
 .header-container {
     width: 100%;
     height: 80px;
-    background-color: #777;
     display: flex;
+    justify-content: center;
+    border-bottom: 1px solid #ccc;
 }
-.header-container .left {
+.header-container .header-panel {
+    width: 90%;
+    height: 100%;
     display: flex;
+    justify-content: space-between;
 }
-.header-container .left .logo {
-    height: 36px;
+.header-container .header-panel .left {
+    height: 100%;
+    display: flex;
+    align-items: center;
 }
+.header-container .header-panel .right {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+.header-container .header-panel .left .logo {
+    height: 50px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #ccc;
+}
+.header-container .header-panel .left .title {
+    margin-left: 20px;
+    font-size: 20px;
+}
+.header-container .header-panel .right .btn-create-room {
+    margin-right: 50px;
+    cursor: pointer;
+}
+.header-container .header-panel .right .btn-create-room:hover {
+
+}
+
+.header-container .header-panel .right .user-panel {
+    display: flex;
+    cursor: pointer;
+}
+.header-container .header-panel .right .user-panel .nickname {
+
+}
+.header-container .header-panel .right .user-panel .icon-update-name {
+    margin-left: 4px;
+    display: none;
+}
+.header-container .header-panel .right .user-panel:hover {
+    color: #000;
+}
+
 
 .main-container {
     margin-top: 50px;
@@ -119,6 +162,12 @@
     right: 10px;
     bottom: 10px;
     color: #c3c3c3;
+}
+
+.box-update-user {
+    padding: 30px;
+    width: 300px;
+    display: none;
 }
 
 .footer-container {

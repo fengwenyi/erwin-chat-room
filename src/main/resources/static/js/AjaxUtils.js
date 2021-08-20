@@ -10,6 +10,10 @@ function ajaxPost(jQuery, layer, url, data,  funcSuc) {
             layerIndex = layer.load(0, { shade: 0.1 });
         },
         success: funcSuc,
+        error: function (response) {
+            let responseJSON = response.responseJSON;
+            alertFail(layer, responseJSON.msg);
+        },
         complete: function () {
             layer.close(layerIndex);
         },

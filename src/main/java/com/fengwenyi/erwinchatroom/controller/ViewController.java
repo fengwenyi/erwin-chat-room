@@ -1,22 +1,14 @@
 package com.fengwenyi.erwinchatroom.controller;
 
-import com.fengwenyi.erwinchatroom.domain.UserModel;
-import com.fengwenyi.erwinchatroom.service.IUserService;
 import com.fengwenyi.erwinchatroom.utils.UserUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -27,17 +19,9 @@ import java.util.Objects;
 @Slf4j
 public class ViewController {
 
-    @Autowired
-    private IUserService userService;
-
     @GetMapping("/")
-    public String index(Model model, HttpSession session, HttpServletResponse response, HttpServletRequest request) {
+    public String index(HttpSession session, HttpServletResponse response) {
         session.setMaxInactiveInterval(-1);
-
-        /*UserModel userModel = UserUtils.queryByUid(uid);
-        if (Objects.nonNull(userModel)) {
-            model.addAttribute("nickname", userModel.getNickname());
-        }*/
 
         // 解决浏览器后退不能自动刷新问题
         response.setHeader("Pragma","no-cache");

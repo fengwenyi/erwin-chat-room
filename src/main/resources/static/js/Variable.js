@@ -1,2 +1,3 @@
 const HTTP_POST = 'POST';
-let KEY_UID = 'uid';
+const KEY_UID = 'uid';
+const KEY_NICKNAME = 'nickname';
