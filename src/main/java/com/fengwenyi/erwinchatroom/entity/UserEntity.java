@@ -21,8 +21,6 @@ public class UserEntity {
 
     private String nickname;
 
-    private String sessionId;
-
     private LocalDateTime createTime;
 
     private LocalDateTime updateTime;
