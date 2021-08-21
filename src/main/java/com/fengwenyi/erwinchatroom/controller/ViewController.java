@@ -32,15 +32,11 @@ public class ViewController {
         return "index";
     }
 
-    @GetMapping("/chat-room/{uid}")
-    public String chatRoom(@PathVariable String uid, Model model, HttpSession session) {
-        if (!session.getId().equals(uid)
-                || Objects.isNull(UserUtils.queryByUid(uid))) {
-            model.addAttribute("error", true);
-            model.addAttribute("msg", "非法进入聊天室");
-        } else {
-            model.addAttribute("uid", uid);
-        }
+    // rid
+    // password
+
+    @GetMapping("/chat/{rid}/{password}")
+    public String chatRoom(@PathVariable String rid, @PathVariable String password) {
         return "chat-room";
     }
 }

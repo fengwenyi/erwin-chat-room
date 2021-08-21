@@ -11,7 +11,12 @@ layui.use(function () {
     userInit();
     userNickname();
 
-    apiGetRoomList(1)
+    let currentPage = 1;
+    const PAGE_SIZE = 50;
+
+    apiGetRoomList(currentPage);
+
+    let layerIndex;
 
     // 监听点击修改昵按钮
     jQuery('#btn-set-nickname').on('click', function () {
@@ -19,7 +24,7 @@ layui.use(function () {
         if (isNotEmpty(nickname)) {
             jQuery('input[name=nickname]').val(nickname);
         }
-        layer.open({
+        layerIndex = layer.open({
             type: 1,
             title: '设置',
             closeBtn: 1, //不显示关闭按钮
@@ -38,7 +43,7 @@ layui.use(function () {
             alertFail(layer, "请先设置昵称")
             return;
         }
-        layer.open({
+        layerIndex = layer.open({
             type: 1,
             title: '创建房间',
             closeBtn: 1, //不显示关闭按钮
@@ -194,6 +199,7 @@ layui.use(function () {
             if (response.success) {
                 setNickname(nickname)
                 userNickname();
+                layer.close(layerIndex)
                 alertSuccess(layer, response.msg)
             } else {
                 alertFail(layer, response.msg)
@@ -212,7 +218,8 @@ layui.use(function () {
                 // setNickname(nickname)
                 // userNickname();
                 // alertSuccess(layer, response.msg)
-                alertSuccess(layer, response.msg)
+                // alertSuccess(layer, response.msg);
+                window.location.href = '/chat/' + response.body.rid + "/...";
             } else {
                 alertFail(layer, response.msg)
             }
@@ -223,13 +230,60 @@ layui.use(function () {
     function apiGetRoomList(currentPage) {
         let pageRequest = {};
         pageRequest.currentPage = currentPage;
-        pageRequest.pageSize = 50;
+        pageRequest.pageSize = PAGE_SIZE;
         ajaxPost(jQuery, layer, "/room/getPage", JSON.stringify(pageRequest), function (response) {
             if (response.success) {
-                console.log(response.body)
+                console.log(response.body);
+                roomList(response.body.content)
+                page(response.body.currentPage, response.body.totalRows)
             } else {
                 alertFail(layer, response.msg)
             }
         })
+    }
+
+    function roomList(roomList) {
+        let htmlContent = '';
+        for (let i = 0; i < roomList.length; i++) {
+            htmlContent += buildRoomItemHtmlContent(roomList[i]);
+        }
+        jQuery('#room-list').html(htmlContent)
+    }
+
+    function buildRoomItemHtmlContent(room) {
+        let htmlContent;
+
+        htmlContent = '<div class="room-item" id="room-' + room.rid + '">\n' +
+            '                    <div class="back"></div>\n' +
+            '                    <div class="content">\n';
+
+        if (room.needPassword) {
+            htmlContent += '                        <div class="lock"><i class="layui-icon layui-icon-password"></i></div>\n';
+        }
+
+        htmlContent += '                        <div class="name">' + room.name + '</div>\n' +
+            '                        <div class="info"><span>' + room.userCount + '</span>人在线</div>\n' +
+            '                    </div>\n' +
+            '                </div>';
+
+
+        return htmlContent;
+    }
+
+    // 分页
+    function page(currentPage, total) {
+        //总页数低于页码总数
+        laypage.render({
+            elem: 'box-page'
+            , curr: currentPage
+            ,count: total //数据总数
+            , limit: PAGE_SIZE
+            , jump: function(obj, first){
+                //首次不执行
+                if(!first){
+                    apiGetRoomList(obj.curr)
+                }
+            }
+        });
     }
 });

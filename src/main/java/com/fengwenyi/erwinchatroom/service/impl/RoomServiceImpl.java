@@ -51,8 +51,8 @@ public class RoomServiceImpl implements IRoomService {
                         .setCreateTime(LocalDateTime.now())
                         .setPassword(requestVo.getPassword())
                         .setNeedPassword(StringUtils.hasText(requestVo.getPassword()))
-                        .setCreateTime(LocalDateTime.now())
-                        .setUserCount(0));
+                        .setUserCount(0)
+                        .setCreateUserUid(userEntity.getUid()));
         RoomResponseVo responseVo = new RoomResponseVo()
                 .setRid(roomEntity.getRid())
                 .setName(roomEntity.getName())
@@ -85,7 +85,7 @@ public class RoomServiceImpl implements IRoomService {
                 })
                 .collect(Collectors.toList());
         PageTemplate<List<RoomResponseVo>> pageTemplate = new PageTemplate<List<RoomResponseVo>>()
-                .setCurrentPage(pageRequest.getCurrentPage() + 1)
+                .setCurrentPage((long) pageResult.getNumber() + 1)
                 .setPageSize(pageResult.getSize())
                 .setTotalPages((long) pageResult.getTotalPages())
                 .setTotalRows(pageResult.getTotalElements())
