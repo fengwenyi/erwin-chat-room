@@ -11,6 +11,8 @@ layui.use(function () {
     userInit();
     userNickname();
 
+    apiGetRoomList(1)
+
     // 监听点击修改昵按钮
     jQuery('#btn-set-nickname').on('click', function () {
         let nickname = getNickname();
@@ -34,11 +36,29 @@ layui.use(function () {
         let nickname = getNickname();
         if (isEmpty(nickname)) {
             alertFail(layer, "请先设置昵称")
+            return;
         }
+        layer.open({
+            type: 1,
+            title: '创建房间',
+            closeBtn: 1, //不显示关闭按钮
+            anim: 5,
+            shade: [0.5],
+            area: ['', ''],
+            shadeClose: true, //开启遮罩关闭
+            content: jQuery('.box-room')
+        });
     });
 
+    // 监听修改用户
     form.on('submit(formUpdateUser)', function (data) {
         userSetNickname(data.field.nickname)
+        return false;
+    });
+
+    // 监听创建房间
+    form.on('submit(formRoom)', function (data) {
+        apiCreateRoom(data.field.name, data.field.password)
         return false;
     });
 
@@ -175,6 +195,38 @@ layui.use(function () {
                 setNickname(nickname)
                 userNickname();
                 alertSuccess(layer, response.msg)
+            } else {
+                alertFail(layer, response.msg)
+            }
+        })
+    }
+
+    // 创建房间
+    function apiCreateRoom(name, password) {
+        let room = {};
+        room.createUserUid = getUid();
+        room.name = name;
+        room.password = password;
+        ajaxPost(jQuery, layer, "/room/create", JSON.stringify(room), function (response) {
+            if (response.success) {
+                // setNickname(nickname)
+                // userNickname();
+                // alertSuccess(layer, response.msg)
+                alertSuccess(layer, response.msg)
+            } else {
+                alertFail(layer, response.msg)
+            }
+        })
+    }
+
+    // 获取房间列表
+    function apiGetRoomList(currentPage) {
+        let pageRequest = {};
+        pageRequest.currentPage = currentPage;
+        pageRequest.pageSize = 50;
+        ajaxPost(jQuery, layer, "/room/getPage", JSON.stringify(pageRequest), function (response) {
+            if (response.success) {
+                console.log(response.body)
             } else {
                 alertFail(layer, response.msg)
             }
