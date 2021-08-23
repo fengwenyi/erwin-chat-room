@@ -2,7 +2,17 @@
 <html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>聊天室</title>
+    <title>在线聊天室</title>
+
+    <meta name="author" content="冯文议·Erwin Feng"/>
+    <meta name="keyword" th:content="在线聊天室"/>
+    <meta name="description" th:content="在线聊天室"/>
+
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+
     <link rel="stylesheet" href="/static/lib/layui/css/layui.css">
     <link rel="stylesheet" href="/static/css/chat-room.css">
     <script src="/static/lib/layui/layui.js"></script>
@@ -18,57 +28,133 @@
                 });
         }
     </script>
-    <script src="/static/js/chat-room.js"></script>
+<!--    <script src="/static/js/chat-room.js"></script>-->
 </head>
 <body>
-<div class="layui-layout layui-layout-admin">
-    <div class="layui-side layui-bg-black">
-        <ul class="users-container" id="users-container">
-            <!--<li class="user-container">
+<header class="header-container">
+    xxx群聊(<span id="room-user-count">2</span>)
+</header>
+
+<div class="main-container">
+    <div class="left-container">
+        <div class="user-container">
+            <div class="box-user">
                 <div class="nickname">张三</div>
-                <div class="time">01:31:00</div>
-            </li>-->
-        </ul>
+                <div class="up-time">20:13:10</div>
+            </div>
+            <div class="box-user">
+                <div class="nickname">张三张三张三张三张三张三张三张三张三张三张三张三张三张三张三张三张三张三张三张三</div>
+                <div class="up-time">20:13:10</div>
+            </div>
+        </div>
     </div>
-
-    <div class="layui-body">
-        <div class="broadcast-container" id="message-broadcast"></div>
-
-        <div class="conn-container" id="message-conn"></div>
-
-        <ul class="chats-container" id="chats-container">
-            <!--<li class="chat-container left-chat-container">
-                <div class="left">
-                    <div class="user-header">
-                        <div class="img">张</div>
+    <div class="right-container">
+        <div class="center-container">
+            <div class="chat-container">
+                <div></div>
+                <!--<div class="box-chat box-chat-time">
+                    <div class="time">22:00</div>
+                </div>
+                <div class="box-chat box-chat-other">
+                    <div class="left">
+                        <div class="user-header">
+                            <div class="img">张</div>
+                        </div>
+                    </div>
+                    <div class="right">
+                        <div class="user-nickname">张三</div>
+                        <div class="user-message">
+                            <div class="content">Hello，你好</div>
+                            <div class="bubble"></div>
+                        </div>
                     </div>
                 </div>
-                <div class="right">
-                    <div class="user-nickname">张三</div>
-                    <div class="user-message">
-                        <div class="content">Hello，你好</div>
-                        <div class="bubble"></div>
+                <div class="box-chat box-chat-self">
+                    <div class="right">
+                        <div class="user-header">
+                            <div class="img">李</div>
+                        </div>
+                    </div>
+                    <div class="left">
+                        <div class="user-message">
+                            <div class="content">Hello，你好</div>
+                            <div class="bubble"></div>
+                        </div>
+                    </div>
+                </div>-->
+                <div class="box-chat box-chat-time">
+                    <div class="time">22:00</div>
+                </div>
+                <div class="box-chat box-chat-other">
+                    <div class="left">
+                        <div class="user-header">
+                            <div class="img"></div>
+                        </div>
+                    </div>
+                    <div class="right">
+                        <div class="user-nickname">张三</div>
+                        <div class="user-message">
+                            <div class="content">吃饭了吗</div>
+                            <div class="bubble"></div>
+                        </div>
                     </div>
                 </div>
-            </li>-->
-            <!--<li class="chat-container right-chat-container">
-                <div class="right">
-                    <div class="user-header">
-                        <div class="img"></div>
+                <div class="box-chat box-chat-self">
+                    <div class="right">
+                        <div class="user-header">
+                            <div class="img"></div>
+                        </div>
+                    </div>
+                    <div class="left">
+                        <div class="user-message">
+                            <div class="content">吃了</div>
+                            <div class="bubble"></div>
+                        </div>
                     </div>
                 </div>
-                <div class="left">
-                    <div class="user-message">
-                        <div class="content">Hello，你好</div>
-                        <div class="bubble"></div>
+                <div class="box-chat box-chat-other">
+                    <div class="left">
+                        <div class="user-header">
+                            <div class="img"></div>
+                        </div>
+                    </div>
+                    <div class="right">
+                        <div class="user-nickname">张三</div>
+                        <div class="user-message">
+                            <div class="content">你有梦想吗</div>
+                            <div class="bubble"></div>
+                        </div>
                     </div>
                 </div>
-            </li>-->
-            <!--<li class="chat-container center-chat-container">
-                <div class="time">05:30:32</div>
-            </li>-->
-        </ul>
-
+                <div class="box-chat box-chat-self">
+                    <div class="right">
+                        <div class="user-header">
+                            <div class="img"></div>
+                        </div>
+                    </div>
+                    <div class="left">
+                        <div class="user-message">
+                            <div class="content">我的梦想就是吃饱饭</div>
+                            <div class="bubble"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-chat box-chat-other">
+                    <div class="left">
+                        <div class="user-header">
+                            <div class="img"></div>
+                        </div>
+                    </div>
+                    <div class="right">
+                        <div class="user-nickname">张三</div>
+                        <div class="user-message">
+                            <div class="content">你会梦想成真的</div>
+                            <div class="bubble"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="form-container">
             <form class="layui-form" action="">
                 <input type="text" name="message" required lay-verify="required" autocomplete="off" class="layui-input">
