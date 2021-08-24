@@ -1,13 +1,31 @@
 package com.fengwenyi.erwinchatroom.vo.response;
 
+import com.fengwenyi.erwinchatroom.enums.MessageTypeEnum;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+import lombok.experimental.SuperBuilder;
+
 /**
  * @author <a href="https://www.fengwenyi.com">Erwin Feng</a>
  * @since 2021-08-24
  */
-public class ChatMessageResponseVo {
+//@Data
+//@Accessors(chain = true)
+@Setter
+@Getter
+public class ChatMessageResponseVo extends MessageResponseVo {
 
-    private Integer messageType;
+    private UserResponseVo sender;
 
-    private MessageResponseVo message;
+    // 是否是本人
+    private Boolean self;
+
+    public ChatMessageResponseVo() {
+        super.setMessageType(MessageTypeEnum.CHAT.getCode());
+    }
+
 
 }

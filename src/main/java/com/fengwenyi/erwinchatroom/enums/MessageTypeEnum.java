@@ -9,7 +9,8 @@ import lombok.Getter;
 @Getter
 public enum MessageTypeEnum {
 
-    TEXT(1, "文本")
+    CHAT(1, "聊天")
+    , BROADCAST(9, "广播")
 
     ;
 

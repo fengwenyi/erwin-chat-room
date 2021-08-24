@@ -7,11 +7,12 @@ import lombok.Data;
  * @since 2021-08-24
  */
 @Data
-public class ChatMessageRequestVo extends MessageRequestVo {
+public class ContentRequestVo {
 
-    // 房间ID
-    private String rid;
+    // 内容类型
+    private Integer contentType;
 
-
+    // 内容
+    private String content;
 
 }

@@ -9,10 +9,6 @@ import lombok.Data;
 @Data
 public class MessageRequestVo {
 
-    // 内容类型
-    private Integer contentType;
-
-    // 内容
-    private String content;
+    private ContentRequestVo message;
 
 }
