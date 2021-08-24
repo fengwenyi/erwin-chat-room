@@ -14,7 +14,7 @@
 
 
     <link rel="stylesheet" href="/static/lib/layui/css/layui.css">
-    <link rel="stylesheet" href="/static/css/chat-room.css">
+    <link rel="stylesheet" href="/static/css/chat.css">
     <script src="/static/lib/layui/layui.js"></script>
     <script th:inline="javascript">
         let error = [[${error}]];
@@ -28,7 +28,11 @@
                 });
         }
     </script>
-<!--    <script src="/static/js/chat-room.js"></script>-->
+
+<!--    <script src="https://cdn.bootcdn.net/ajax/libs/stomp.js/2.3.3/stomp.js"></script>-->
+    <script src="https://cdn.bootcdn.net/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="/static/lib/js/sockjs.min.js"></script>
+    <script src="/static/js/chat.js"></script>
 </head>
 <body>
 <header class="header-container">

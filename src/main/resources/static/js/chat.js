@@ -9,19 +9,23 @@ layui.use(function() {
 
     let host = window.location.host;
 
-    let uid = getUid();
+    //let uid = getUid();
+    let rid = getRid();
 
     let headImgNo = 0;
     let lastReceiveMsgTimestamp = 0;
     let socket;
+    let stompClient = {};
 
     if(typeof(WebSocket) === "undefined") {
         console.error("您的浏览器不支持WebSocket");
     }else {
+
+        connect();
         //console.log("您的浏览器支持WebSocket");
 
         //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
-        socket = new WebSocket("wss://" + host + "/chat-room/" + uid);
+        /*socket = new WebSocket("wss://" + host + "/chat-room/" + uid);
         //打开事件
         socket.onopen = function () {
         };
@@ -60,7 +64,7 @@ layui.use(function() {
         socket.onclose = function() {
         };
         socket.onerror = function() {
-        }
+        }*/
         /*$(window).unload(function(){
             socket.close();
         });*/
@@ -73,7 +77,9 @@ layui.use(function() {
 
         let message = data.field.message
 
-        socket.send(message);
+        //socket.send(message);
+
+        send(message)
 
         jQuery('.layui-input').val('')
 
@@ -81,6 +87,11 @@ layui.use(function() {
     });
 
     function getUid() {
+        let url = document.location.toString();
+        let start = url.lastIndexOf("/")
+        return url.substring(start + 1, url.length)
+    }
+    function getRid() {
         let url = document.location.toString();
         let start = url.lastIndexOf("/")
         return url.substring(start + 1, url.length)
@@ -205,6 +216,60 @@ layui.use(function() {
             '                <div class="time">' + user.timeStr + '</div>\n' +
             '            </li>';
     }
+
+
+
+    function connect() {
+        // let sock = new SockJS("http://localhost:8080/room?sessionId=" + sessionId)
+        let sock = new SockJS("http://localhost:8080/portfolio")
+        stompClient = Stomp.over(sock);//使用STMOP子协议的WebSocket客户端
+        stompClient.connect({},function(frame){//连接WebSocket服务端
+            // console.log('Connected:' + frame);
+            //通过stompClient.subscribe订阅/topic/getResponse 目标(destination)发送的消息
+            stompClient.subscribe('/topic/getResponse',function(response){
+                showResponse(JSON.parse(response.body));
+            });
+
+            chatRoom();
+        });
+    }
+
+    //关闭双通道
+    function disconnect(){
+        if(stompClient != null) {
+            stompClient.disconnect();
+        }
+        console.log("Disconnected");
+    }
+    function showResponse(message){
+        console.log(message)
+    }
+
+
+
+
+
+    function chatRoom() {
+        stompClient.subscribe('/room/' + rid,function(response){
+            showResponse(response.body);
+        });
+    }
+
+    //function send(message) {
+    //
+    /**
+     * 发送聊天消息
+     * @param format 格式：1-文本
+     * @param content 内容
+     */
+    function sendChatMessage(format, content) {
+        let data = {}
+        data.rid = rid;
+        data.format = format;
+        data.content = content;
+        stompClient.send("/app/chat/room", {}, JSON.stringify(data));
+    }
+
 });
 
 

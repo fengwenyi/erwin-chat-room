@@ -34,9 +34,8 @@ public class ViewController {
 
     // rid
     // password
-
-    @GetMapping("/chat/{rid}/{password}")
-    public String chatRoom(@PathVariable String rid, @PathVariable String password) {
-        return "chat-room";
+    @GetMapping("/chat/{rid}")
+    public String chat(@PathVariable String rid) {
+        return "chat";
     }
 }
