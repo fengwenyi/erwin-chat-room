@@ -165,13 +165,16 @@ layui.use(function () {
         };
     }
 
+    /**
+     * 用户初始化
+     */
     function userInit() {
-        let uid = getUid();
-        if (isEmpty(uid)) {
-            uid = ''
-        }
-        let user = { uid : uid};
+        let user = {};
+        user.uid = getUid();
+        user.nickname = getNickname();
+        console.log('用户初始化-请求参数={}' + JSON.stringify(user))
         ajaxPost(jQuery, layer, "/user/init", JSON.stringify(user), function (response) {
+            console.log('用户初始化-响应参数={}', response)
             if (response.success) {
                 if (isNotEmpty(response.body.uid)) {
                     setUid(response.body.uid)
@@ -215,11 +218,7 @@ layui.use(function () {
         room.password = password;
         ajaxPost(jQuery, layer, "/room/create", JSON.stringify(room), function (response) {
             if (response.success) {
-                // setNickname(nickname)
-                // userNickname();
-                // alertSuccess(layer, response.msg)
-                // alertSuccess(layer, response.msg);
-                window.location.href = '/chat/' + response.body.rid + "/...";
+                gotoRoom(response.body.rid)
             } else {
                 alertFail(layer, response.msg)
             }
@@ -253,7 +252,7 @@ layui.use(function () {
     function buildRoomItemHtmlContent(room) {
         let htmlContent;
 
-        htmlContent = '<div class="room-item" id="room-' + room.rid + '">\n' +
+        htmlContent = '<div class="room-item" id="room-' + room.rid + '" onclick="enterRoom(\'' + room.rid + '\')">\n' +
             '                    <div class="back"></div>\n' +
             '                    <div class="content">\n';
 
@@ -285,5 +284,52 @@ layui.use(function () {
                 }
             }
         });
+    }
+
+    // 点击进入房间
+    window.enterRoom = function enterRoom(rid) {
+        if (isEmpty(getUid())) {
+            console.error('用户id为空');
+            alertFail(layer, '请关闭浏览器，重新进入');
+            return;
+        }
+        if (isEmpty(getNickname())) {
+            alertFail(layer, '请先设置昵称');
+            return;
+        }
+        ajaxGet(jQuery, layer, "/room/" + rid, function (response) {
+            if (response.success) {
+                if (judgeNeedPassword(response.body.needPassword, response.body.createUserUid)) {
+                    // 需要密码
+                    layer.msg("需要密码")
+                } else {
+                    // 不需要密码
+                    //layer.msg("不需要密码");
+                    gotoRoom(rid)
+                }
+            } else {
+                alertFail(layer, response.msg)
+            }
+        });
+    }
+
+    // 判断是否需要密码
+    function judgeNeedPassword(needPassword, createUserUid) {
+        // 房间不需要密码
+        if (needPassword === null || !needPassword) {
+            return false;
+        }
+        // 房间需要密码
+        // 本地用户id为空
+        if (isEmpty(getUid())) {
+            return true;
+        }
+        // 不是创建者
+        return getUid() !== createUserUid;
+    }
+
+    // 去房间
+    function gotoRoom(rid) {
+        window.location.href = '/chat/' + rid;
     }
 });

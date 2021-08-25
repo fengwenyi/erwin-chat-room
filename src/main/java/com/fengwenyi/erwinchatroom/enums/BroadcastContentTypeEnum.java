@@ -10,9 +10,11 @@ import lombok.Getter;
 @Getter
 public enum BroadcastContentTypeEnum {
 
-    SYSTEM(9, "系统广播")
-    , ROOM(1, "房间广播")
-    , TIP(2, "提示广播")
+    SYSTEM(100, "系统广播")
+    , ROOM(200, "房间广播")
+
+    , TIP_USER_ENTER_ROOM(301, "提示广播：用户进入房间")
+    , TIP_USER_LEAVE_ROOM(302, "提示广播：用户进入房间")
 
     ;
 

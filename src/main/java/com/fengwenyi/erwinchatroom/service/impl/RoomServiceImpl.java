@@ -12,7 +12,9 @@ import com.fengwenyi.erwinchatroom.service.IRoomService;
 import com.fengwenyi.erwinchatroom.vo.request.RoomRequestVo;
 import com.fengwenyi.erwinchatroom.vo.response.RoomResponseVo;
 import com.fengwenyi.javalib.convert.DateTimeUtils;
+import com.fengwenyi.javalib.convert.JsonUtils;
 import com.fengwenyi.javalib.generate.IdUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +25,7 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -30,6 +33,7 @@ import java.util.stream.Collectors;
  * @since 2021-08-21
  */
 @Service
+@Slf4j
 public class RoomServiceImpl implements IRoomService {
 
     @Autowired
@@ -40,9 +44,13 @@ public class RoomServiceImpl implements IRoomService {
 
     @Override
     public ResultTemplate<RoomResponseVo> create(RoomRequestVo requestVo) {
-        UserEntity userEntity = userRepository.findById(requestVo.getCreateUserUid()).orElse(null);
-        if (Objects.isNull(userEntity)) {
+        Optional<UserEntity> optionalUser = userRepository.findById(requestVo.getCreateUserUid());
+        if (!optionalUser.isPresent()) {
             Asserts.fail("创建者ID不正确");
+        }
+        UserEntity userEntity = optionalUser.get();
+        if (!StringUtils.hasText(userEntity.getNickname())) {
+            Asserts.fail("请先取一个昵称");
         }
         RoomEntity roomEntity = roomRepository.save(
                 new RoomEntity()
@@ -93,5 +101,40 @@ public class RoomServiceImpl implements IRoomService {
                 ;
 
         return ResultTemplate.success(pageTemplate);
+    }
+
+    @Override
+    public ResultTemplate<RoomResponseVo> get(String rid) {
+        log.debug("rid={}", rid);
+        Optional<RoomEntity> optionalRoom = roomRepository.findById(rid);
+        if (!optionalRoom.isPresent()) {
+            return ResultTemplate.fail("房间ID不正确");
+        }
+
+        RoomEntity roomEntity = optionalRoom.get();
+        Optional<UserEntity> optionalUser = userRepository.findById(roomEntity.getCreateUserUid());
+        if (!optionalUser.isPresent()) {
+            return ResultTemplate.fail("房间创建者ID异常");
+        }
+        UserEntity userEntity = optionalUser.get();
+        RoomResponseVo responseVo = new RoomResponseVo()
+                .setRid(roomEntity.getRid())
+                .setName(roomEntity.getName())
+                .setNeedPassword(roomEntity.getNeedPassword())
+                .setCreateUserUid(userEntity.getUid())
+                .setCreateUserNickname(userEntity.getNickname())
+                .setCreateTimeString(DateTimeUtils.format(roomEntity.getCreateTime(), "HH:mm"))
+                ;
+        return ResultTemplate.success(responseVo);
+    }
+
+    @Override
+    public ResultTemplate<String> getUserCount(String rid) {
+        Optional<RoomEntity> optionalRoom = roomRepository.findById(rid);
+        if (optionalRoom.isPresent()) {
+            Integer userCount = optionalRoom.get().getUserCount();
+            return ResultTemplate.success(String.valueOf(userCount));
+        }
+        return ResultTemplate.success(String.valueOf(0));
     }
 }

@@ -8,10 +8,7 @@ import com.fengwenyi.erwinchatroom.vo.request.RoomRequestVo;
 import com.fengwenyi.erwinchatroom.vo.response.RoomResponseVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,4 +33,13 @@ public class RoomController {
         return roomService.getPage(pageRequest);
     }
 
+    @GetMapping("/{rid}")
+    public ResultTemplate<RoomResponseVo> get(@PathVariable String rid) {
+        return roomService.get(rid);
+    }
+
+    @GetMapping("/{rid}/user-count")
+    public ResultTemplate<String> getUserCount(@PathVariable String rid) {
+        return roomService.getUserCount(rid);
+    }
 }

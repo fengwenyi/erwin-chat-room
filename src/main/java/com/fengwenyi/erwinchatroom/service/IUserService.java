@@ -11,8 +11,6 @@ import com.fengwenyi.erwinchatroom.vo.response.UserInitResponseVo;
  */
 public interface IUserService {
 
-    void init(String sessionId);
-
     /**
      * 用户初始化
      * @param requestVo

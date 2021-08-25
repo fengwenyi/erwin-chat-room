@@ -27,6 +27,8 @@
                     window.location.href = "/";
                 });
         }
+
+        let rid = [[${rid}]];
     </script>
 
 <!--    <script src="https://cdn.bootcdn.net/ajax/libs/stomp.js/2.3.3/stomp.js"></script>-->
@@ -39,7 +41,7 @@
 </head>
 <body>
 <header class="header-container">
-    xxx群聊(<span id="room-user-count">2</span>)
+    <span th:text="${roomName}"></span>(<span id="room-user-count">1</span>)
 </header>
 
 <div class="main-container">

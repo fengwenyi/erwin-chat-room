@@ -9,9 +9,6 @@ layui.use(function() {
 
     let host = window.location.host;
 
-    //let uid = getUid();
-    let rid = getRid();
-
     let headImgNo = 0;
     let lastReceiveMsgTimestamp = 0;
     let socket;
@@ -85,17 +82,6 @@ layui.use(function() {
 
         return false;
     });
-
-    function getUid() {
-        let url = document.location.toString();
-        let start = url.lastIndexOf("/")
-        return url.substring(start + 1, url.length)
-    }
-    function getRid() {
-        let url = document.location.toString();
-        let start = url.lastIndexOf("/")
-        return url.substring(start + 1, url.length)
-    }
 
     function color(){
         let colorAngle = Math.floor(Math.random()*360);
@@ -223,8 +209,14 @@ layui.use(function() {
         // let sock = new SockJS("http://localhost:8080/room?sessionId=" + sessionId)
         let sock = new SockJS("http://localhost:8080/portfolio")
         stompClient = Stomp.over(sock);//使用STMOP子协议的WebSocket客户端
-        stompClient.debug = false;
-        stompClient.connect({},function(frame){//连接WebSocket服务端
+        //stompClient.debug = true;
+        let header = {};
+        header.rid = rid;
+        header.uid = getUid();
+        stompClient.connect(header, function(frame){//连接WebSocket服务端
+
+            apiGetRoomUserCount();
+
             // console.log('Connected:' + frame);
             //通过stompClient.subscribe订阅/topic/getResponse 目标(destination)发送的消息
             stompClient.subscribe('/topic/getResponse',function(response){
@@ -233,13 +225,16 @@ layui.use(function() {
 
             // 接收房间聊天消息
             receiverRoomChatMessage();
-        });
+        }, function (err) {});
     }
 
     //关闭双通道
     function disconnect(){
         if(stompClient != null) {
-            stompClient.disconnect();
+            let header = {};
+            header.rid = rid;
+            header.uid = getUid();
+            stompClient.disconnect(header);
         }
         console.log("Disconnected");
     }
@@ -248,19 +243,24 @@ layui.use(function() {
     }
 
 
+    //强制关闭浏览器  调用websocket.close（）,进行正常关闭
+    // window.onbeforeunload = function() {
+    //     disconnect()
+    // }
+
 
 
 
     // 接收房间聊天消息
     function receiverRoomChatMessage() {
         stompClient.subscribe('/room/' + rid, function(response) {
-            // console.info(response)
+            console.info(response)
             let result = JSON.parse(response.body);
             if (result.success) {
                 let messageVo = result.body;
                 let messageType = messageVo.messageType;
                 if (messageType === 9) {
-                    handleBroadcastMsg(messageVo)
+                    handleRoomBroadcastMessage(messageVo)
                 } else if (messageType === 1) {
                     handleRoomChatMessage(messageVo);
                 } else {
@@ -278,19 +278,16 @@ layui.use(function() {
         let timestamp = chatMessageVo.timestamp;
         let timeStr = chatMessageVo.timeStr;
         let sender = chatMessageVo.sender;
-        let self = chatMessageVo.self;
 
         let message = chatMessageVo.message;
 
         let htmlContent = handleRoomChatMessageTimeTip(timestamp, timeStr);
 
-        if (self) {
-            // 右边
-            htmlContent += buildSelfMessageHtmlContent(headImgNo, headerText, message);
-
+        if (judgeMessageFromSelf(sender)) {
+            // 自己发的消息
+            htmlContent += buildHtmlContentSelfChatMessage(sender, message)
         } else {
-            // 左边
-            //htmlContent += buildOtherMessageHtmlContent(headImgNo, headerText, nickname, message);
+            // 其他人发的消息
             htmlContent += buildHtmlContentOtherChatMessage(sender, message)
         }
 
@@ -301,9 +298,37 @@ layui.use(function() {
         chatDiv.scrollTop = chatDiv.scrollHeight;
     }
 
+    // 判断是不是本人发的消息
+    function judgeMessageFromSelf(sender) {
+        if (sender === null) {
+            return false;
+        }
+        let uid = sender.uid;
+        if (isEmpty(uid)) {
+            return false;
+        }
+        return uid === getUid();
+    }
+
     // 处理房间广播消息
     function handleRoomBroadcastMessage(broadcastMessageVo) {
+        let message = broadcastMessageVo.message;
 
+        let contentType = message.contentType;
+        let content = message.content;
+
+        if (contentType === 301) {
+            layer.msg(content);
+
+            // 房间人数
+            apiGetRoomUserCount();
+
+            // 房间用户列表
+        }
+    }
+
+    function handleGetRoomUserCount(userCount) {
+        jQuery('#room-user-count').html(userCount);
     }
 
     function handleRoomChatMessageTimeTip(timestamp, timeStr) {
@@ -340,6 +365,25 @@ layui.use(function() {
             '                </div>';
     }
 
+    //
+    function buildHtmlContentSelfChatMessage(sender, message) {
+        let contentType = message.contentType;
+        let content = message.content;
+        return '<div class="box-chat box-chat-self">\n' +
+            '                    <div class="right">\n' +
+            '                        <div class="user-header">\n' +
+            '                            <div class="img"></div>\n' +
+            '                        </div>\n' +
+            '                    </div>\n' +
+            '                    <div class="left">\n' +
+            '                        <div class="user-message">\n' +
+            '                            <div class="content">' + content + '</div>\n' +
+            '                            <div class="bubble"></div>\n' +
+            '                        </div>\n' +
+            '                    </div>\n' +
+            '                </div>';
+    }
+
     // 构造 htmlContent 时间提示
     function buildHtmlContentChatTime(timeStr) {
         return '<div class="box-chat box-chat-time">\n' +
@@ -357,6 +401,7 @@ layui.use(function() {
     function sendChatMessage(format, content) {
         let data = {};
         data.rid = rid;
+        data.uid = getUid();
         let message = {};
         message.contentType = format;
         message.content = content;
@@ -364,6 +409,24 @@ layui.use(function() {
         stompClient.send("/app/chat/room", {}, JSON.stringify(data));
     }
 
+    function apiGetRoomUserCount() {
+        ajaxGet(jQuery, layer, '/room/' + rid + '/user-count', function (response) {
+            console.log(response)
+            if (response.success) {
+                handleGetRoomUserCount(response.body)
+            }
+        });
+    }
 });
 
+bindCloseBrowser()
 
+//浏览器关闭或刷新事件
+function bindCloseBrowser() {
+    var a = "注意！！\n您即将离开页面！离开后可能会导致数据丢失\n\n您确定要离开吗？";
+    window.onbeforeunload = function (b) {
+        b = b || window.event;
+        b.returnValue = a;
+        return a
+    }
+}

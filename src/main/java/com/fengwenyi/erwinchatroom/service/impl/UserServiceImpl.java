@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author <a href="https://www.fengwenyi.com">Erwin Feng</a>
@@ -26,17 +27,6 @@ public class UserServiceImpl implements IUserService {
     private IUserRepository userRepository;
 
     @Override
-    public void init(String uid) {
-        UserEntity userEntity = userRepository.findById(uid).orElse(null);
-        if (Objects.isNull(userEntity)) {
-            userRepository.save(
-                    new UserEntity()
-                            .setUid(uid)
-                            .setLoginTime(LocalDateTime.now()));
-        }
-    }
-
-    @Override
     public ResultTemplate<UserInitResponseVo> init(UserInitRequestVo requestVo) {
 
         String uid = requestVo.getUid();
@@ -44,10 +34,14 @@ public class UserServiceImpl implements IUserService {
             uid = IdUtils.genId();
         }
 
-        UserEntity userEntity = userRepository.findById(uid).orElse(null);
+        Optional<UserEntity> optionalUser = userRepository.findById(uid);
 
-        if (Objects.isNull(userEntity)) {
-            userRepository.save(new UserEntity().setUid(uid).setCreateTime(LocalDateTime.now()));
+        if (!optionalUser.isPresent()) {
+            userRepository.save(
+                    new UserEntity()
+                            .setUid(uid)
+                            .setNickname(requestVo.getNickname())
+                            .setCreateTime(LocalDateTime.now()));
         }
 
         UserInitResponseVo responseVo = new UserInitResponseVo().setUid(uid);

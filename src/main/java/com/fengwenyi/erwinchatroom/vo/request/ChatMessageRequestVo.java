@@ -12,6 +12,7 @@ public class ChatMessageRequestVo extends MessageRequestVo {
     // 房间ID
     private String rid;
 
+    private String uid;
 
 
 }

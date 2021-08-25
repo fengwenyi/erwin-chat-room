@@ -27,4 +27,18 @@ public interface IRoomService {
      * @return
      */
     ResultTemplate<PageTemplate<List<RoomResponseVo>>> getPage(PageRequest<?> pageRequest);
+
+    /**
+     * 根据id查询
+     * @param rid 房间id
+     * @return
+     */
+    ResultTemplate<RoomResponseVo> get(String rid);
+
+    /**
+     * 房间用户统计
+     * @param rid
+     * @return
+     */
+    ResultTemplate<String> getUserCount(String rid);
 }

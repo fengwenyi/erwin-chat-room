@@ -31,10 +31,4 @@ public class UserController {
         return userService.updateUser(requestVo);
     }
 
-    @GetMapping("/test")
-    public ResultTemplate<?> test() throws Exception {
-        //int i = 1 / 0;
-        throw new Exception("1111");
-    }
-
 }

@@ -1,6 +1,7 @@
 package com.fengwenyi.erwinchatroom.entity;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 
@@ -11,11 +12,11 @@ import javax.persistence.*;
 @Entity
 @Table(name = "t_room_user")
 @Data
+@Accessors(chain = true)
 public class RoomUserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private String id;
+    private String sessionId;
 
     private String rid;
 

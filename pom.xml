@@ -10,7 +10,8 @@
     </parent>
     <groupId>com.fengwenyi</groupId>
     <artifactId>erwin-chat-room</artifactId>
-    <version>1.0.1-BUILD</version>
+    <version>1.1.0-SNAPSHOT</version>
+    <!--<version>1.1.0</version>-->
     <name>erwin-chat-room</name>
     <description>erwin-chat-room</description>
     <properties>
@@ -94,8 +95,20 @@
         <repository>
             <id>nexus-aliyun</id>
             <name>Nexus aliyun</name>
+            <url>https://maven.aliyun.com/repository/public</url>
+        </repository>
+        <repository>
+            <id>nexus-aliyun-central</id>
+            <name>Nexus aliyun Central</name>
+            <url>https://maven.aliyun.com/repository/central</url>
+        </repository>
+        <!--
+        <repository>
+            <id>nexus-aliyun-old</id>
+            <name>Nexus aliyun Old</name>
             <url>http://maven.aliyun.com/nexus/content/groups/public</url>
         </repository>
+        -->
     </repositories>
 
 </project>

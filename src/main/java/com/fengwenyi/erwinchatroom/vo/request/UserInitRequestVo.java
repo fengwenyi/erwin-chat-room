@@ -13,4 +13,6 @@ public class UserInitRequestVo {
 
     private String uid;
 
+    private String nickname;
+
 }

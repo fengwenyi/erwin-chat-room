@@ -19,6 +19,8 @@ public class RoomResponseVo {
 
     private Boolean needPassword;
 
+    private String createUserUid;
+
     private String createUserNickname;
 
     private String createTimeString;
