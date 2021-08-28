@@ -5,6 +5,7 @@ import com.fengwenyi.erwinchatroom.entity.RoomEntity;
 import com.fengwenyi.erwinchatroom.repository.IRoomRepository;
 import com.fengwenyi.erwinchatroom.utils.CacheKeyUtils;
 import com.fengwenyi.erwinchatroom.utils.UserUtils;
+import com.fengwenyi.javalib.generate.IdUtils;
 import com.github.benmanes.caffeine.cache.Cache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,5 +93,18 @@ public class ViewController {
         }
 
         return "chat";
+    }
+
+    // 邀请
+    @GetMapping("/invite")
+    public String invite(String rid, String inviteUid, Model model) {
+        Optional<RoomEntity> optionalRoom = roomRepository.findById(rid);
+        if (optionalRoom.isPresent()) {
+            RoomEntity roomEntity = optionalRoom.get();
+            if (roomEntity.getNeedPassword()) {
+                String token = IdUtils.genId();
+            }
+        }
+        return "invite";
     }
 }
