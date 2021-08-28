@@ -94,7 +94,7 @@
 
 .main-container {
     margin-top: 50px;
-    min-height: 500px;
+    min-height: 300px;
     display: flex;
     justify-content: center;
 }
@@ -105,7 +105,7 @@
 
 .room-list {
     width: 100%;
-    min-height: 500px;
+    min-height: 300px;
     /*background-color: #fff;*/
     display: grid;
     grid-gap: 50px 50px;
