@@ -1,3 +1,13 @@
+@charset "UTF-8";
+
+
+.divider {
+    width: 1px;
+    height: 15px;
+    background-color: #c3c3c3;
+    margin-right: 20px;
+    margin-left: 20px;
+}
 
 /*.main-container {
     width: 100%;
@@ -6,7 +16,7 @@
     display: flex;
     justify-content: center;
 }*/
-.form-container {
+/*.form-container {
     width: 300px;
     height: 50px;
     position: absolute;
@@ -15,7 +25,7 @@
     right: 0;
     bottom: 0;
     margin: auto;
-}
+}*/
 /*.layui-form {
     width: 100%;
     height: 100%;
@@ -60,7 +70,6 @@
     font-size: 20px;
 }
 .header-container .header-panel .right .btn-create-room {
-    margin-right: 50px;
     cursor: pointer;
 }
 .header-container .header-panel .right .btn-create-room:hover {
@@ -193,6 +202,9 @@
     align-items: center;
     justify-content: center;
     border-top: 1px solid #eee;
+}
+.footer-container a {
+    margin-left: 10px;
 }
 
 @media only screen and (min-width: 1100px) {

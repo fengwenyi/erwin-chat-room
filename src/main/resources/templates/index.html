@@ -16,10 +16,13 @@
     <link rel="stylesheet" href="/static/css/index.css">
 
     <script src="/static/lib/layui/layui.js"></script>
-    <script src="/static/lib/js/sockjs.min.js"></script>
-    <script src="/static/js/Variable.js"></script>
-    <script src="/static/js/Utils.js"></script>
-    <script src="/static/js/AjaxUtils.js"></script>
+
+    <script src="/static/util/Variable.js"></script>
+    <script src="/static/util/Utils.js"></script>
+    <script src="/static/util/CacheUtils.js"></script>
+    <script src="/static/util/LayerUtils.js"></script>
+    <script src="/static/util/AjaxUtils.js"></script>
+
     <script src="/static/js/index.js"></script>
 </head>
 <body>
@@ -35,8 +38,9 @@
             <div class="right">
                 <div class="btn-create-room" id="btn-create-room">
                     创建房间
-                    <i class="layui-icon layui-icon-add-circle-fine"></i>
+                    <!--<i class="layui-icon layui-icon-add-circle-fine"></i>-->
                 </div>
+                <div class="divider"></div>
                 <div class="user-panel" id="btn-set-nickname">
                     <span class="nickname" id="nickname">设置昵称</span>
                     <i class="layui-icon icon-update-name layui-icon-triangle-d"></i>
@@ -76,7 +80,7 @@
         <div class="box-update-user">
             <form class="layui-form" action="">
                 <div class="layui-form-item">
-                    <input type="text" name="nickname" required  lay-verify="required" placeholder="请输入昵称" autocomplete="off" class="layui-input">
+                    <input type="text" name="nickname" required  lay-verify="required" placeholder="请输入昵称" autocomplete="off" class="layui-input" maxlength="20">
                 </div>
                 <div class="layui-form-item btn-panel">
                     <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="formUpdateUser">立即提交</button>
@@ -86,10 +90,10 @@
         <div class="box-room">
             <form class="layui-form" action="">
                 <div class="layui-form-item">
-                    <input type="text" name="name" required  lay-verify="required" placeholder="请输入房间名称" autocomplete="off" class="layui-input">
+                    <input type="text" name="name" required  lay-verify="required" placeholder="请输入房间名称" autocomplete="off" class="layui-input" maxlength="20">
                 </div>
                 <div class="layui-form-item">
-                    <input type="password" name="password" placeholder="请设置房间密码" autocomplete="off" class="layui-input">
+                    <input type="password" name="password" placeholder="请设置房间密码" autocomplete="off" class="layui-input" maxlength="16">
                 </div>
                 <div class="layui-form-item btn-panel">
                     <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="formRoom">立即提交</button>

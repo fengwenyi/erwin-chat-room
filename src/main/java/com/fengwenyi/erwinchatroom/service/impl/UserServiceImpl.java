@@ -41,6 +41,7 @@ public class UserServiceImpl implements IUserService {
                     new UserEntity()
                             .setUid(uid)
                             .setNickname(requestVo.getNickname())
+                            .setAvatarBgColor(requestVo.getAvatarBgColor())
                             .setCreateTime(LocalDateTime.now()));
         }
 
@@ -50,12 +51,16 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public ResultTemplate<Void> updateUser(UserRequestVo requestVo) {
+    public ResultTemplate<Void> update(UserRequestVo requestVo) {
         UserEntity userEntity = userRepository.findById(requestVo.getUid()).orElse(null);
         if (Objects.isNull(userEntity)) {
             return ResultTemplate.fail("用户查询失败");
         }
-        userRepository.save(userEntity.setNickname(requestVo.getNickname()).setUpdateTime(LocalDateTime.now()));
+        userRepository.save(
+                userEntity
+                        .setNickname(requestVo.getNickname())
+                        .setAvatarBgColor(requestVo.getAvatarBgColor())
+                        .setUpdateTime(LocalDateTime.now()));
         return ResultTemplate.success();
     }
 }

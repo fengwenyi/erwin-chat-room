@@ -5,6 +5,7 @@ import com.fengwenyi.api.result.PageTemplate;
 import com.fengwenyi.api.result.ResultTemplate;
 import com.fengwenyi.erwinchatroom.vo.request.RoomRequestVo;
 import com.fengwenyi.erwinchatroom.vo.response.RoomResponseVo;
+import com.fengwenyi.erwinchatroom.vo.response.UserResponseVo;
 
 import java.util.List;
 
@@ -41,4 +42,11 @@ public interface IRoomService {
      * @return
      */
     ResultTemplate<String> getUserCount(String rid);
+
+    /**
+     * 获取房间用户列表
+     * @param rid 房间id
+     * @return 用户列表
+     */
+    ResultTemplate<List<UserResponseVo>> getUserList(String rid);
 }

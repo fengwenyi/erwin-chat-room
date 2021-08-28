@@ -61,10 +61,10 @@ public class WebSocketDisconnectListener implements ApplicationListener<SessionD
 
         String rid = roomUserEntity.getRid();
         String uid = roomUserEntity.getUid();
-        log.debug(rid);
-        log.debug(uid);
+//        log.debug(rid);
+//        log.debug(uid);
 
-        log.debug("离开房间：sessionId={}, rid={}, uid={}", sessionId, rid, uid);
+//        log.debug("离开房间：sessionId={}, rid={}, uid={}", sessionId, rid, uid);
 
         Optional<RoomEntity> optionalRoom = roomRepository.findById(rid);
         if (optionalRoom.isPresent()) {

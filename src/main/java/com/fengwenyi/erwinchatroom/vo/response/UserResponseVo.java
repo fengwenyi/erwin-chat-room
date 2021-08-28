@@ -15,6 +15,8 @@ public class UserResponseVo {
 
     private String nickname;
 
+    private String avatarBgColor;
+
     private String timeStr;
 
 }

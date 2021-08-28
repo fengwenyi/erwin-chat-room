@@ -13,4 +13,6 @@ public class UserInitResponseVo {
 
     private String uid;
 
+    private String avatarBgColor;
+
 }

@@ -21,6 +21,9 @@ public class UserEntity {
 
     private String nickname;
 
+    // 头像背景颜色
+    private String avatarBgColor;
+
     private LocalDateTime createTime;
 
     private LocalDateTime updateTime;

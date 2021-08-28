@@ -54,7 +54,11 @@ public class ChatServiceImpl implements IChatService {
 
         UserEntity userEntity = optionalUser.get();
 
-        chatMessageResponseVo.setSender(new UserResponseVo().setUid(userEntity.getUid()).setNickname(userEntity.getNickname()));
+        chatMessageResponseVo.setSender(
+                new UserResponseVo()
+                        .setUid(userEntity.getUid())
+                        .setNickname(userEntity.getNickname())
+                        .setAvatarBgColor(userEntity.getAvatarBgColor()));
         chatMessageResponseVo.setTimestamp(System.currentTimeMillis() / 1000);
         chatMessageResponseVo.setTimeStr(DateTimeUtils.format(LocalDateTime.now(), "HH:mm"));
 

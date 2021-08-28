@@ -58,7 +58,7 @@ public class WebSocketConnectListener implements ApplicationListener<SessionConn
         String rid = accessor.getNativeHeader("rid").get(0);
         String uid = accessor.getNativeHeader("uid").get(0);
 
-        log.debug("进入房间：sessionId={}, rid={}, uid={}", sessionId, rid, uid);
+//        log.debug("进入房间：sessionId={}, rid={}, uid={}", sessionId, rid, uid);
 
         Optional<RoomEntity> optionalRoom = roomRepository.findById(rid);
         if (optionalRoom.isPresent()) {
@@ -66,7 +66,7 @@ public class WebSocketConnectListener implements ApplicationListener<SessionConn
             roomRepository.save(roomEntity.setUserCount(roomEntity.getUserCount() + 1));
         }
 
-        roomUserRepository.save(new RoomUserEntity().setRid(rid).setUid(uid).setSessionId(sessionId));
+        roomUserRepository.save(new RoomUserEntity().setSessionId(sessionId).setRid(rid).setUid(uid).setEntryTime(LocalDateTime.now()));
 
         UserEntity userEntity = userRepository.findById(uid).orElse(null);
 

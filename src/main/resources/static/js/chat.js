@@ -14,208 +14,34 @@ layui.use(function() {
     let socket;
     let stompClient = {};
 
+    let needClose = false;
+
     if(typeof(WebSocket) === "undefined") {
         console.error("您的浏览器不支持WebSocket");
-    }else {
+    } else {
+        if (!error) {
+            connect();
+            needClose = true;
 
-        connect();
-        //console.log("您的浏览器支持WebSocket");
-
-        //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
-        /*socket = new WebSocket("wss://" + host + "/chat-room/" + uid);
-        //打开事件
-        socket.onopen = function () {
-        };
-        socket.onmessage = function(messageEvent) {
-            //console.log(messageEvent.data)
-            let result = JSON.parse(messageEvent.data);
-            if (result.success) {
-                let response = result.body;
-                let msgType = response.msgType;
-                // console.log(response)
-                switch (msgType) {
-                    case 0:
-                        handleConnMsg(response);
-                        break;
-                    case 1:
-                        handleBroadcastMsg(response);
-                        break;
-                    case 2:
-                        handleChatMsg(response);
-                        break;
-                    case 3:
-                        handleOnlineUserListMsg(response);
-                        break;
-                    case 4:
-                        handleUserUpLineMsg(response);
-                        break;
-                }
-            } else {
-                layer.alert(
-                    result.msg, {icon: 5},
-                    function () {
-                        window.location.href = "/";
-                    });
-            }
-        };
-        socket.onclose = function() {
-        };
-        socket.onerror = function() {
-        }*/
-        /*$(window).unload(function(){
-            socket.close();
-        });*/
-    }
-
-
-
-    //监听提交
-    form.on('submit(formSend)', function(data){
-
-        let message = data.field.message
-
-        //socket.send(message);
-
-        sendChatMessage(1, message)
-
-        jQuery('.layui-input').val('')
-
-        return false;
-    });
-
-    function color(){
-        let colorAngle = Math.floor(Math.random()*360);
-        return 'hsla('+ colorAngle +',100%,50%,1)';
-    }
-
-    function handleConnMsg(response) {
-        let message = response.message;
-        jQuery('#message-conn').html(message);
-        jQuery('.conn-container').css('display', 'flex')
-        setTimeout(function (){
-            jQuery('.conn-container').css('display', 'none')
-        }, 3000);
-    }
-    function handleBroadcastMsg(response) {
-        let message = response.message;
-        jQuery('.broadcast-container').html(message);
-        jQuery('#message-broadcast').css('display', 'flex')
-    }
-    function handleChatMsg(response) {
-
-        headImgNo++;
-
-        let fromType = response.fromType;
-        let sender = response.sender;
-        let nickname = sender.nickname;
-        let headerText = nickname.substring(0, 1)
-        let receiver = response.receiver;
-        let message = response.message;
-        let timestamp = response.timestamp;
-        let timeStr = response.timeStr;
-        let self = response.self;
-
-        let htmlContent;
-
-        // 如果大于 1 分钟，则显示
-        if (timestamp - lastReceiveMsgTimestamp > 60) {
-            htmlContent = buildTimeHtmlContent(timeStr);
+            // 5s 自动重连
+            // 有问题
+            // setInterval(function () {
+            //     connect();
+            // }, 5000)
         }
-
-        lastReceiveMsgTimestamp = timestamp;
-
-        if (fromType === 1) {
-            if (self) {
-                // 右边
-                htmlContent += buildSelfMessageHtmlContent(headImgNo, headerText, message);
-
-            } else {
-                // 左边
-                htmlContent += buildOtherMessageHtmlContent(headImgNo, headerText, nickname, message);
-            }
-        }
-        jQuery('#chats-container').append(htmlContent);
-        jQuery('#head-' + headImgNo).css('background-color', color())
-
-        let chatDiv = document.getElementById('chats-container')
-        chatDiv.scrollTop = chatDiv.scrollHeight;
     }
-
-    function handleOnlineUserListMsg(response) {
-        let onlineUserList = response.onlineUserList;
-        let htmlContent = '';
-        for (let i = 0; i < onlineUserList.length; i++) {
-            let user = onlineUserList[i]
-            htmlContent += buildOnlineUserHtmlContent(user)
-        }
-        jQuery('#users-container').html(htmlContent);
-    }
-
-    function handleUserUpLineMsg(response) {
-        let userUpLine = response.userUpLine;
-        let htmlContent = buildOnlineUserHtmlContent(userUpLine)
-        jQuery('#users-container').append(htmlContent);
-    }
-
-    function buildSelfMessageHtmlContent(headImgNo, headText, message) {
-        return '<li class="chat-container right-chat-container">\n' +
-            '                    <div class="right">\n' +
-            '                        <div class="user-header">\n' +
-            '                            <div class="img" id="head-'+ headImgNo + '">' + headText + '</div>\n' +
-            '                        </div>\n' +
-            '                    </div>\n' +
-            '                    <div class="left">\n' +
-            '                        <div class="user-message">\n' +
-            '                            <div class="content">' + message + '</div>\n' +
-            '                            <div class="bubble"></div>\n' +
-            '                        </div>\n' +
-            '                    </div>\n' +
-            '                </li>';
-    }
-
-    function buildOtherMessageHtmlContent(headImgNo, headText, nickname, message) {
-        return '<li class="chat-container left-chat-container">\n' +
-            '                <div class="left">\n' +
-            '                    <div class="user-header">\n' +
-            '                        <div class="img" id="head-'+ headImgNo + '">' + headText + '</div>\n' +
-            '                    </div>\n' +
-            '                </div>\n' +
-            '                <div class="right">\n' +
-            '                    <div class="user-nickname">' + nickname + '</div>\n' +
-            '                    <div class="user-message">\n' +
-            '                        <div class="content">' + message + '</div>\n' +
-            '                        <div class="bubble"></div>\n' +
-            '                    </div>\n' +
-            '                </div>\n' +
-            '            </li>';
-    }
-
-    function buildTimeHtmlContent(timeStr) {
-        return '<li class="chat-container center-chat-container">\n' +
-            '                <div class="time">' + timeStr + '</div>\n' +
-            '            </li>';
-    }
-
-    function buildOnlineUserHtmlContent(user) {
-        return '<li class="user-container">\n' +
-            '                <div class="nickname">' + user.nickname + '</div>\n' +
-            '                <div class="time">' + user.timeStr + '</div>\n' +
-            '            </li>';
-    }
-
-
 
     function connect() {
-        // let sock = new SockJS("http://localhost:8080/room?sessionId=" + sessionId)
-        let sock = new SockJS("http://localhost:8080/portfolio")
+        let sock = new SockJS("http://localhost:8080/ws")
         stompClient = Stomp.over(sock);//使用STMOP子协议的WebSocket客户端
-        //stompClient.debug = true;
+        stompClient.debug = false;
         let header = {};
         header.rid = rid;
         header.uid = getUid();
         stompClient.connect(header, function(frame){//连接WebSocket服务端
 
             apiGetRoomUserCount();
+            apiGetRoomUsers();
 
             // console.log('Connected:' + frame);
             //通过stompClient.subscribe订阅/topic/getResponse 目标(destination)发送的消息
@@ -227,6 +53,18 @@ layui.use(function() {
             receiverRoomChatMessage();
         }, function (err) {});
     }
+
+    //监听提交
+    form.on('submit(formSend)', function(data){
+
+        let message = data.field.message;
+
+        sendChatMessage(1, message)
+
+        jQuery('.layui-input').val('')
+
+        return false;
+    });
 
     //关闭双通道
     function disconnect(){
@@ -244,10 +82,33 @@ layui.use(function() {
 
 
     //强制关闭浏览器  调用websocket.close（）,进行正常关闭
-    // window.onbeforeunload = function() {
-    //     disconnect()
-    // }
+    /*window.onbeforeunload = function(e) {
+        //disconnect()
+        //return "退出吗?";
+        e.preventDefault();
+        e.returnValue = "注意！！\n您即将离开页面！离开后可能会导致数据丢失\n\n您确定要离开吗？";
+        //return e;
+    }*/
 
+    if (needClose) {
+        window.onbeforeunload = function (e) {
+            e = e || window.event;
+
+            disconnect();
+
+            let tip = "注意！！\\n您即将离开页面！离开后将端开服务器链接，可能会导致数据丢失\\n\\n您确定要离开吗？";
+
+            // 兼容IE8和Firefox 4之前的版本
+            if (e) {
+                e.returnValue = tip;
+            }
+
+
+
+            // Chrome, Safari, Firefox 4+, Opera 12+ , IE 9+
+            return tip;
+        };
+    }
 
 
 
@@ -324,6 +185,7 @@ layui.use(function() {
             apiGetRoomUserCount();
 
             // 房间用户列表
+            apiGetRoomUsers();
         }
     }
 
@@ -345,14 +207,13 @@ layui.use(function() {
 
     // 构造 htmlContent 其他人聊天内容
     function buildHtmlContentOtherChatMessage(sender, message) {
-        // let nickname = sender.nickname;
-        let nickname = '张三';
+        let nickname = sender.nickname;
         let contentType = message.contentType;
         let content = message.content;
         return '<div class="box-chat box-chat-other">\n' +
             '                    <div class="left">\n' +
             '                        <div class="user-header">\n' +
-            '                            <div class="img"></div>\n' +
+            '                            <div class="img" style="background-color: '+ sender.avatarBgColor +';">' + buildUserHeadText(sender.nickname) + '</div>\n' +
             '                        </div>\n' +
             '                    </div>\n' +
             '                    <div class="right">\n' +
@@ -372,7 +233,7 @@ layui.use(function() {
         return '<div class="box-chat box-chat-self">\n' +
             '                    <div class="right">\n' +
             '                        <div class="user-header">\n' +
-            '                            <div class="img"></div>\n' +
+            '                            <div class="img" style="background-color: '+ sender.avatarBgColor +';">' + buildUserHeadText(sender.nickname) + '</div>\n' +
             '                        </div>\n' +
             '                    </div>\n' +
             '                    <div class="left">\n' +
@@ -409,6 +270,7 @@ layui.use(function() {
         stompClient.send("/app/chat/room", {}, JSON.stringify(data));
     }
 
+    // 获取房间用户数量
     function apiGetRoomUserCount() {
         ajaxGet(jQuery, layer, '/room/' + rid + '/user-count', function (response) {
             console.log(response)
@@ -417,16 +279,53 @@ layui.use(function() {
             }
         });
     }
+
+    // 获取房间用户列表
+    function apiGetRoomUsers() {
+        ajaxGet(jQuery, layer, '/room/' + rid + '/users', function (response) {
+            console.log(response)
+            if (response.success) {
+                handleGetRoomUsers(response.body)
+            }
+        });
+    }
+
+    // 处理获取的房间用户列表
+    function handleGetRoomUsers(users) {
+        let htmlContent = '';
+        for (let i = 0; i < users.length; i++) {
+            htmlContent += buildHtmlContentUser(users[i])
+        }
+        jQuery("#user-container").html(htmlContent)
+    }
+
+    // 拼接房间用户
+    function buildHtmlContentUser(user) {
+        return '<div class="box-user" id="' + user.uid + '">\n' +
+            '                <div class="nickname">' + user.nickname + '</div>\n' +
+            '                <div class="up-time">' + user.timeStr + '</div>\n' +
+            '            </div>';
+    }
+
+    /**
+     * 获取用户头像文本
+     * @param nickname
+     * @returns {string}
+     */
+    function buildUserHeadText(nickname) {
+        return nickname.substring(0, 1);
+    }
+
 });
 
-bindCloseBrowser()
+// bindCloseBrowser()
 
 //浏览器关闭或刷新事件
-function bindCloseBrowser() {
-    var a = "注意！！\n您即将离开页面！离开后可能会导致数据丢失\n\n您确定要离开吗？";
-    window.onbeforeunload = function (b) {
-        b = b || window.event;
-        b.returnValue = a;
-        return a
-    }
-}
+// function bindCloseBrowser() {
+//     var a = "注意！！\n您即将离开页面！离开后可能会导致数据丢失\n\n您确定要离开吗？";
+//     window.onbeforeunload = function (b) {
+//         b = b || window.event;
+//         b.returnValue = a;
+//         return a
+//     }
+// }

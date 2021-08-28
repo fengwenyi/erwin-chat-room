@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /**
  * @author <a href="https://www.fengwenyi.com">Erwin Feng</a>
@@ -21,5 +22,7 @@ public class RoomUserEntity {
     private String rid;
 
     private String uid;
+
+    private LocalDateTime entryTime;
 
 }

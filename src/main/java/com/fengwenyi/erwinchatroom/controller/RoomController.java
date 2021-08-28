@@ -6,6 +6,7 @@ import com.fengwenyi.api.result.ResultTemplate;
 import com.fengwenyi.erwinchatroom.service.IRoomService;
 import com.fengwenyi.erwinchatroom.vo.request.RoomRequestVo;
 import com.fengwenyi.erwinchatroom.vo.response.RoomResponseVo;
+import com.fengwenyi.erwinchatroom.vo.response.UserResponseVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -41,5 +42,10 @@ public class RoomController {
     @GetMapping("/{rid}/user-count")
     public ResultTemplate<String> getUserCount(@PathVariable String rid) {
         return roomService.getUserCount(rid);
+    }
+
+    @GetMapping("/{rid}/users")
+    public ResultTemplate<List<UserResponseVo>> getUserList(@PathVariable String rid) {
+        return roomService.getUserList(rid);
     }
 }

@@ -15,4 +15,6 @@ public class UserInitRequestVo {
 
     private String nickname;
 
+    private String avatarBgColor;
+
 }

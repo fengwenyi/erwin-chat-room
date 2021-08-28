@@ -172,6 +172,7 @@ layui.use(function () {
         let user = {};
         user.uid = getUid();
         user.nickname = getNickname();
+        user.avatarBgColor = getAvatarBgColor();
         console.log('用户初始化-请求参数={}' + JSON.stringify(user))
         ajaxPost(jQuery, layer, "/user/init", JSON.stringify(user), function (response) {
             console.log('用户初始化-响应参数={}', response)
@@ -195,15 +196,21 @@ layui.use(function () {
 
     function userSetNickname(nickname) {
         let uid = getUid();
+        let avatarBgColor = getAvatarBgColor();
+        if (isEmpty(avatarBgColor)) {
+            avatarBgColor = recommendColor();
+        }
         let user = {};
         user.uid = uid;
         user.nickname = nickname;
+        user.avatarBgColor = avatarBgColor;
         ajaxPost(jQuery, layer, "/user/update", JSON.stringify(user), function (response) {
             if (response.success) {
-                setNickname(nickname)
+                setNickname(nickname);
+                setAvatarBgColor(avatarBgColor);
                 userNickname();
-                layer.close(layerIndex)
-                alertSuccess(layer, response.msg)
+                layer.close(layerIndex);
+                alertSuccess(layer, response.msg);
             } else {
                 alertFail(layer, response.msg)
             }

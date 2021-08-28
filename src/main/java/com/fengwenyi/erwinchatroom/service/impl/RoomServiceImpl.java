@@ -5,17 +5,21 @@ import com.fengwenyi.api.result.PageTemplate;
 import com.fengwenyi.api.result.ResultTemplate;
 import com.fengwenyi.apistarter.utils.Asserts;
 import com.fengwenyi.erwinchatroom.entity.RoomEntity;
+import com.fengwenyi.erwinchatroom.entity.RoomUserEntity;
 import com.fengwenyi.erwinchatroom.entity.UserEntity;
 import com.fengwenyi.erwinchatroom.repository.IRoomRepository;
+import com.fengwenyi.erwinchatroom.repository.IRoomUserRepository;
 import com.fengwenyi.erwinchatroom.repository.IUserRepository;
 import com.fengwenyi.erwinchatroom.service.IRoomService;
 import com.fengwenyi.erwinchatroom.vo.request.RoomRequestVo;
 import com.fengwenyi.erwinchatroom.vo.response.RoomResponseVo;
+import com.fengwenyi.erwinchatroom.vo.response.UserResponseVo;
 import com.fengwenyi.javalib.convert.DateTimeUtils;
 import com.fengwenyi.javalib.convert.JsonUtils;
 import com.fengwenyi.javalib.generate.IdUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -41,6 +45,9 @@ public class RoomServiceImpl implements IRoomService {
 
     @Autowired
     private IUserRepository userRepository;
+
+    @Autowired
+    private IRoomUserRepository roomUserRepository;
 
     @Override
     public ResultTemplate<RoomResponseVo> create(RoomRequestVo requestVo) {
@@ -136,5 +143,26 @@ public class RoomServiceImpl implements IRoomService {
             return ResultTemplate.success(String.valueOf(userCount));
         }
         return ResultTemplate.success(String.valueOf(0));
+    }
+
+    @Override
+    public ResultTemplate<List<UserResponseVo>> getUserList(String rid) {
+        RoomUserEntity roomUserEntity = new RoomUserEntity().setRid(rid);
+        Example<RoomUserEntity> example = Example.of(roomUserEntity);
+        List<RoomUserEntity> roomUserEntities = roomUserRepository.findAll(example, Sort.by("entryTime").ascending());
+        List<UserResponseVo> responseVoList = roomUserEntities.stream().map(ruEntity -> {
+            String uid = ruEntity.getUid();
+            Optional<UserEntity> optionalUser = userRepository.findById(uid);
+            if (optionalUser.isPresent()) {
+                UserEntity userEntity = optionalUser.get();
+                return new UserResponseVo()
+                        .setUid(uid)
+                        .setNickname(userEntity.getNickname())
+                        .setAvatarBgColor(userEntity.getAvatarBgColor())
+                        .setTimeStr(DateTimeUtils.format(ruEntity.getEntryTime(), "HH:mm:ss"));
+            }
+            return null;
+        }).filter(Objects::nonNull).collect(Collectors.toList());
+        return ResultTemplate.success(responseVoList);
     }
 }

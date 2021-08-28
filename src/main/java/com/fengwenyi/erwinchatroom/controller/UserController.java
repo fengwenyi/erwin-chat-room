@@ -28,7 +28,7 @@ public class UserController {
 
     @PostMapping("/update")
     public ResultTemplate<Void> update(@RequestBody @Validated UserRequestVo requestVo) {
-        return userService.updateUser(requestVo);
+        return userService.update(requestVo);
     }
 
 }

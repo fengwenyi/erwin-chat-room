@@ -23,5 +23,5 @@ public interface IUserService {
      * @param requestVo
      * @return
      */
-    ResultTemplate<Void> updateUser(UserRequestVo requestVo);
+    ResultTemplate<Void> update(UserRequestVo requestVo);
 }

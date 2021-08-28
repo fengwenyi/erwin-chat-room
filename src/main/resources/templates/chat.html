@@ -2,7 +2,7 @@
 <html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>在线聊天室</title>
+    <title th:text="'在线聊天室-' + ${roomName}"></title>
 
     <meta name="author" content="冯文议·Erwin Feng"/>
     <meta name="keyword" th:content="在线聊天室"/>
@@ -32,29 +32,28 @@
     </script>
 
 <!--    <script src="https://cdn.bootcdn.net/ajax/libs/stomp.js/2.3.3/stomp.js"></script>-->
-    <script src="https://cdn.bootcdn.net/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<!--    <script src="https://cdn.bootcdn.net/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>-->
+    <script src="/static/lib/js/stomp.min.js"></script>
     <script src="/static/lib/js/sockjs.min.js"></script>
-    <script src="/static/js/Variable.js"></script>
-    <script src="/static/js/Utils.js"></script>
-    <script src="/static/js/AjaxUtils.js"></script>
+    <script src="/static/util/Variable.js"></script>
+    <script src="/static/util/Utils.js"></script>
+    <script src="/static/util/CacheUtils.js"></script>
+    <script src="/static/util/LayerUtils.js"></script>
+    <script src="/static/util/AjaxUtils.js"></script>
     <script src="/static/js/chat.js"></script>
 </head>
 <body>
 <header class="header-container">
-    <span th:text="${roomName}"></span>(<span id="room-user-count">1</span>)
+    <span class="room-name" th:text="${roomName}">群聊</span> (<span id="room-user-count">0</span>)
 </header>
 
 <div class="main-container">
     <div class="left-container">
-        <div class="user-container">
-            <div class="box-user">
+        <div class="user-container" id="user-container">
+            <!--<div class="box-user">
                 <div class="nickname">张三</div>
                 <div class="up-time">20:13:10</div>
-            </div>
-            <div class="box-user">
-                <div class="nickname">张三张三张三张三张三张三张三张三张三张三张三张三张三张三张三张三张三张三张三张三</div>
-                <div class="up-time">20:13:10</div>
-            </div>
+            </div>-->
         </div>
     </div>
     <div class="right-container">
@@ -91,7 +90,8 @@
                         </div>
                     </div>
                 </div>-->
-                <div class="box-chat box-chat-time">
+                <!-- chat test example -->
+                <!--<div class="box-chat box-chat-time">
                     <div class="time">22:00</div>
                 </div>
                 <div class="box-chat box-chat-other">
@@ -161,7 +161,7 @@
                             <div class="bubble"></div>
                         </div>
                     </div>
-                </div>
+                </div>-->
             </div>
         </div>
         <div class="form-container">
