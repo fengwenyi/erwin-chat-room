@@ -43,14 +43,9 @@ layui.use(function() {
             apiGetRoomUserCount();
             apiGetRoomUsers();
 
-            // console.log('Connected:' + frame);
-            //通过stompClient.subscribe订阅/topic/getResponse 目标(destination)发送的消息
-            stompClient.subscribe('/topic/getResponse',function(response){
-                showResponse(JSON.parse(response.body));
-            });
-
             // 接收房间聊天消息
             receiverRoomChatMessage();
+
         }, function (err) {});
     }
 
@@ -115,7 +110,7 @@ layui.use(function() {
     // 接收房间聊天消息
     function receiverRoomChatMessage() {
         stompClient.subscribe('/room/' + rid, function(response) {
-            console.info(response)
+            // console.info(response)
             let result = JSON.parse(response.body);
             if (result.success) {
                 let messageVo = result.body;
@@ -273,7 +268,7 @@ layui.use(function() {
     // 获取房间用户数量
     function apiGetRoomUserCount() {
         ajaxGet(jQuery, layer, '/room/' + rid + '/user-count', function (response) {
-            console.log(response)
+            // console.log(response)
             if (response.success) {
                 handleGetRoomUserCount(response.body)
             }
@@ -283,7 +278,7 @@ layui.use(function() {
     // 获取房间用户列表
     function apiGetRoomUsers() {
         ajaxGet(jQuery, layer, '/room/' + rid + '/users', function (response) {
-            console.log(response)
+            // console.log(response)
             if (response.success) {
                 handleGetRoomUsers(response.body)
             }
@@ -317,15 +312,3 @@ layui.use(function() {
     }
 
 });
-
-// bindCloseBrowser()
-
-//浏览器关闭或刷新事件
-// function bindCloseBrowser() {
-//     var a = "注意！！\n您即将离开页面！离开后可能会导致数据丢失\n\n您确定要离开吗？";
-//     window.onbeforeunload = function (b) {
-//         b = b || window.event;
-//         b.returnValue = a;
-//         return a
-//     }
-// }

@@ -100,6 +100,17 @@
                 </div>
             </form>
         </div>
+        <div class="box-room-auth">
+            <form class="layui-form" action="">
+                <input type="hidden" name="rid">
+                <div class="layui-form-item">
+                    <input type="password" name="password" required  lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input" maxlength="16">
+                </div>
+                <div class="layui-form-item btn-panel">
+                    <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="formRoomAuth">立即提交</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <footer class="footer-container">

@@ -11,6 +11,7 @@ import com.fengwenyi.erwinchatroom.repository.IRoomRepository;
 import com.fengwenyi.erwinchatroom.repository.IRoomUserRepository;
 import com.fengwenyi.erwinchatroom.repository.IUserRepository;
 import com.fengwenyi.erwinchatroom.service.IRoomService;
+import com.fengwenyi.erwinchatroom.utils.PasswordUtils;
 import com.fengwenyi.erwinchatroom.vo.request.RoomRequestVo;
 import com.fengwenyi.erwinchatroom.vo.response.RoomResponseVo;
 import com.fengwenyi.erwinchatroom.vo.response.UserResponseVo;
@@ -64,7 +65,7 @@ public class RoomServiceImpl implements IRoomService {
                         .setRid(IdUtils.genId())
                         .setName(requestVo.getName())
                         .setCreateTime(LocalDateTime.now())
-                        .setPassword(requestVo.getPassword())
+                        .setPassword(StringUtils.hasText(requestVo.getPassword()) ? PasswordUtils.encrypt(requestVo.getPassword()) : "")
                         .setNeedPassword(StringUtils.hasText(requestVo.getPassword()))
                         .setUserCount(0)
                         .setCreateUserUid(userEntity.getUid()));

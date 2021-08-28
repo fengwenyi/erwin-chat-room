@@ -1,12 +1,16 @@
 package com.fengwenyi.erwinchatroom.controller;
 
+import com.fengwenyi.api.result.ResultTemplate;
 import com.fengwenyi.erwinchatroom.entity.RoomEntity;
 import com.fengwenyi.erwinchatroom.repository.IRoomRepository;
+import com.fengwenyi.erwinchatroom.utils.CacheKeyUtils;
 import com.fengwenyi.erwinchatroom.utils.UserUtils;
+import com.github.benmanes.caffeine.cache.Cache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -26,6 +30,9 @@ public class ViewController {
     @Autowired
     private IRoomRepository roomRepository;
 
+    @Autowired
+    private Cache<Object, Object> cache;
+
     @GetMapping("/")
     public String index(HttpSession session, HttpServletResponse response) {
         session.setMaxInactiveInterval(-1);
@@ -41,14 +48,44 @@ public class ViewController {
 
     // rid
     // password
-    @GetMapping("/chat/{rid}")
-    public String chat(@PathVariable String rid, Model model) {
+    @GetMapping("/chat/{rid}/{uid}")
+    public String chat(@PathVariable String rid, @PathVariable String uid, String token, Model model) {
 
         Optional<RoomEntity> optionalRoom = roomRepository.findById(rid);
         if (optionalRoom.isPresent()) {
             RoomEntity roomEntity = optionalRoom.get();
+
             model.addAttribute("rid", rid);
             model.addAttribute("roomName", roomEntity.getName());
+            model.addAttribute("needPassword", roomEntity.getNeedPassword());
+
+            if (roomEntity.getNeedPassword()
+                    && !uid.equals(roomEntity.getCreateUserUid())
+                    && !StringUtils.hasText(token)) {
+                // 房间需要密码
+                // 该用户不是房间创建者
+
+                // => 需要校验
+
+                if (!StringUtils.hasText(token)) {
+                    // token为空
+                    model.addAttribute("error", true);
+                    model.addAttribute("msg", "非法进入聊天室");
+                } else {
+
+                    String authToken = (String) cache.getIfPresent((CacheKeyUtils.genRoomUserAuthKey(rid, uid)));
+
+                    if (!StringUtils.hasText(authToken)) {
+                        model.addAttribute("error", true);
+                        model.addAttribute("msg", "非法进入聊天室");
+                    } else {
+                        if (!token.equals(authToken)) {
+                            model.addAttribute("error", true);
+                            model.addAttribute("msg", "非法进入聊天室");
+                        }
+                    }
+                }
+            }
         } else {
             model.addAttribute("error", true);
             model.addAttribute("msg", "非法进入聊天室");

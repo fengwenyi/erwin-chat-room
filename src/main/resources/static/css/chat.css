@@ -19,6 +19,10 @@ html, body {
 .header-container .room-name {
     margin-right: 6px;
 }
+.header-container .lock {
+    margin-right: 10px;
+    color: #ccc;
+}
 
 .main-container {
     width: 100%;

@@ -67,103 +67,11 @@ layui.use(function () {
         return false;
     });
 
-    //监听提交
-    form.on('submit(formEnter)', function (data) {
-        //console.log(JSON.stringify(data.field));
-        let layerIndex;
-        jQuery.ajax({
-            url: "/business/register",
-            type: 'POST',
-            // 请求的媒体类型
-            contentType: "application/json;charset=UTF-8",
-            data: JSON.stringify(data.field),
-            beforeSend: function () {
-                layerIndex = layer.load(0, {shade: 0.1});
-            },
-            success: function (response) {
-                if (response.success) {
-                    //layer.alert(response.msg, { icon: 6 });
-                    let uid = response.body.uid
-                    window.location.href = '/chat-room/' + uid
-                } else {
-                    layer.alert(response.msg, {icon: 5});//失败的表情
-                }
-            },
-            complete: function () {
-                layer.close(layerIndex);
-            },
-        });
+    // 监听房间认证
+    form.on('submit(formRoomAuth)', function (data) {
+        apiRoomUserAuth(data.field.rid, data.field.password)
         return false;
     });
-
-    let sessionId;
-
-    function userInit2() {
-        jQuery.ajax({
-            url: "/auth/userInit",
-            type: 'POST',
-            // 请求的媒体类型
-            contentType: "application/json;charset=UTF-8",
-            //data: JSON.stringify(data.field),
-            beforeSend: function () {
-                //layerIndex = layer.load(0, { shade: 0.1 });
-            },
-            success: function (response) {
-                if (response.success) {
-
-                    sessionId = response.body;
-                    console.log("sessionId=" + sessionId)
-
-                    connRoom()
-
-                    //layer.alert(response.msg, { icon: 6 });
-                    //let uid = response.body.uid
-                    //window.location.href = '/chat-room/' + uid
-                } else {
-                    layer.alert(response.msg, {icon: 5});//失败的表情
-                }
-            },
-            complete: function () {
-                layer.close(layerIndex);
-            },
-        });
-        return false;
-    }
-
-    function connRoom() {
-        let socket = new WebSocket("ws://localhost:8080/room?" + sessionId);
-        socket.onopen = function () {
-            console.log('open');
-            socket.send('test');
-        };
-
-        socket.onmessage = function (e) {
-            console.log('message', e.data);
-            socket.close();
-        };
-
-        socket.onclose = function () {
-            console.log('close');
-        };
-    }
-
-
-    function connChat() {
-        let sock = new SockJS("http://localhost:8080/room?sessionId=" + sessionId)
-        sock.onopen = function () {
-            console.log('open');
-            sock.send('test');
-        };
-
-        sock.onmessage = function (e) {
-            console.log('message', e.data);
-            sock.close();
-        };
-
-        sock.onclose = function () {
-            console.log('close');
-        };
-    }
 
     /**
      * 用户初始化
@@ -173,9 +81,9 @@ layui.use(function () {
         user.uid = getUid();
         user.nickname = getNickname();
         user.avatarBgColor = getAvatarBgColor();
-        console.log('用户初始化-请求参数={}' + JSON.stringify(user))
+        //console.log('用户初始化-请求参数={}' + JSON.stringify(user))
         ajaxPost(jQuery, layer, "/user/init", JSON.stringify(user), function (response) {
-            console.log('用户初始化-响应参数={}', response)
+            //console.log('用户初始化-响应参数={}', response)
             if (response.success) {
                 if (isNotEmpty(response.body.uid)) {
                     setUid(response.body.uid)
@@ -239,7 +147,7 @@ layui.use(function () {
         pageRequest.pageSize = PAGE_SIZE;
         ajaxPost(jQuery, layer, "/room/getPage", JSON.stringify(pageRequest), function (response) {
             if (response.success) {
-                console.log(response.body);
+                // console.log(response.body);
                 roomList(response.body.content)
                 page(response.body.currentPage, response.body.totalRows)
             } else {
@@ -308,14 +216,21 @@ layui.use(function () {
             if (response.success) {
                 if (judgeNeedPassword(response.body.needPassword, response.body.createUserUid)) {
                     // 需要密码
-                    layer.msg("需要密码")
+                    //layer.msg("需要密码")
+                    // 如果token存在，则直接进房间
+                    let token = getRoomUserAuthToken(rid);
+                    if (isNotEmpty(token)) {
+                        gotoRoom(rid);
+                    } else {
+                        roomAuthAlert(rid);
+                    }
                 } else {
                     // 不需要密码
                     //layer.msg("不需要密码");
-                    gotoRoom(rid)
+                    gotoRoom(rid);
                 }
             } else {
-                alertFail(layer, response.msg)
+                alertFail(layer, response.msg);
             }
         });
     }
@@ -337,6 +252,43 @@ layui.use(function () {
 
     // 去房间
     function gotoRoom(rid) {
-        window.location.href = '/chat/' + rid;
+        let uid = getUid();
+        let token = getRoomUserAuthToken(rid);
+        let url = '/chat/' + rid + '/' + uid + '?ct=' + new Date().getTime();
+        if (isNotEmpty(token)) {
+            url += '&token=' + token;
+        }
+        window.location.href = url;
+    }
+
+    // 房间认证弹窗
+    function roomAuthAlert(rid) {
+        jQuery('input[name=rid]').val(rid);
+        layerIndex = layer.open({
+            type: 1,
+            title: '房间认证',
+            closeBtn: 1, //不显示关闭按钮
+            anim: 5,
+            shade: [0.5],
+            area: ['', ''],
+            shadeClose: true, //开启遮罩关闭
+            content: jQuery('.box-room-auth')
+        });
+    }
+
+    // api房间用户认证
+    function apiRoomUserAuth(rid, password) {
+        let data = {};
+        data.rid = rid;
+        data.uid = getUid();
+        data.password = password;
+        ajaxPost(jQuery, layer, '/auth/room-user', JSON.stringify(data), function (response) {
+            if (response.success) {
+                setRoomUserAuthToken(rid, response.body.token);
+                gotoRoom(rid);
+            } else {
+                alertFail(layer, response.msg);
+            }
+        });
     }
 });

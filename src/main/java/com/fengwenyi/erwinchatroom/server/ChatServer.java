@@ -5,15 +5,13 @@ import com.fengwenyi.erwinchatroom.service.IChatService;
 import com.fengwenyi.erwinchatroom.vo.request.ChatMessageRequestVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author <a href="https://www.fengwenyi.com">Erwin Feng</a>
  * @since 2021-08-24
  */
-@Controller
+@RestController
 @MessageMapping("/chat")
 public class ChatServer {
 
