@@ -1,5 +1,8 @@
 package com.fengwenyi.erwinchatroom.config;
 
+import com.fengwenyi.erwinchatroom.interceptor.ChatRoomInterceptor;
+import com.fengwenyi.erwinchatroom.interceptor.RoomInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -15,9 +18,12 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
+    @Autowired
+    private ChatRoomInterceptor roomInterceptor;
+
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws").withSockJS();
+        registry.addEndpoint("/ws").withSockJS().setInterceptors(roomInterceptor);
     }
 
     @Override
@@ -30,6 +36,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
-        WebSocketMessageBrokerConfigurer.super.configureClientInboundChannel(registration);
+        //WebSocketMessageBrokerConfigurer.super.configureClientInboundChannel(registration);
+        //registration.interceptors(roomInterceptor);
     }
 }

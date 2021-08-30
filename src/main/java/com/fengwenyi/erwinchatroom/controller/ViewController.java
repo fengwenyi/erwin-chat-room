@@ -2,21 +2,28 @@ package com.fengwenyi.erwinchatroom.controller;
 
 import com.fengwenyi.api.result.ResultTemplate;
 import com.fengwenyi.erwinchatroom.entity.RoomEntity;
+import com.fengwenyi.erwinchatroom.entity.RoomInviteEntity;
+import com.fengwenyi.erwinchatroom.repository.IRoomInviteRepository;
 import com.fengwenyi.erwinchatroom.repository.IRoomRepository;
 import com.fengwenyi.erwinchatroom.utils.CacheKeyUtils;
 import com.fengwenyi.erwinchatroom.utils.UserUtils;
+import com.fengwenyi.javalib.convert.DateTimeUtils;
 import com.fengwenyi.javalib.generate.IdUtils;
 import com.github.benmanes.caffeine.cache.Cache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -98,13 +105,13 @@ public class ViewController {
     // 邀请
     @GetMapping("/invite")
     public String invite(String rid, String inviteUid, Model model) {
-        Optional<RoomEntity> optionalRoom = roomRepository.findById(rid);
+        /*Optional<RoomEntity> optionalRoom = roomRepository.findById(rid);
         if (optionalRoom.isPresent()) {
             RoomEntity roomEntity = optionalRoom.get();
             if (roomEntity.getNeedPassword()) {
                 String token = IdUtils.genId();
             }
-        }
+        }*/
         return "invite";
     }
 }

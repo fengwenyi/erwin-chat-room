@@ -9,7 +9,6 @@ layui.use(function() {
 
     let host = window.location.host;
 
-    let headImgNo = 0;
     let lastReceiveMsgTimestamp = 0;
     let socket;
     let stompClient = {};
@@ -32,7 +31,8 @@ layui.use(function() {
     }
 
     function connect() {
-        let sock = new SockJS("http://localhost:8080/ws")
+
+        let sock = new SockJS("http://localhost:8080/ws");
         stompClient = Stomp.over(sock);//使用STMOP子协议的WebSocket客户端
         stompClient.debug = false;
         let header = {};
@@ -46,7 +46,18 @@ layui.use(function() {
             // 接收房间聊天消息
             receiverRoomChatMessage();
 
-        }, function (err) {});
+        }/*, function (err) {
+
+        }*/);
+        //stompClient.retry(false)
+    }
+
+    function errorCallBack (error) {
+        // 连接失败时（服务器响应 ERROR 帧）的回调方法
+        document.getElementById("state-info").innerHTML = "连接失败";
+        console.log('连接失败【' + error + '】');
+        //return false;
+        return true;
     }
 
     //监听提交
@@ -309,6 +320,19 @@ layui.use(function() {
      */
     function buildUserHeadText(nickname) {
         return nickname.substring(0, 1);
+    }
+
+
+    // api 邀请
+    function apiInvite() {
+        let url = '/room/' + rid + '/invite?inviteUid=' + getUid();
+        ajaxGet(jQuery, layer, url, function (response) {
+            if (response.success) {
+
+            } else {
+                alertFail(response.msg)
+            }
+        });
     }
 
 });
