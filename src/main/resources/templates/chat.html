@@ -65,12 +65,18 @@
 
     <script src="/static/util/AjaxUtils.js"></script>
     <script src="/static/js/chat.js"></script>
+    <script src="/static/lib/js/html2canvas.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/bluebird/3.7.2/bluebird.js"></script>
 </head>
 <body>
 <header class="header-container">
     <span class="lock"><i class="layui-icon layui-icon-password" id="room-title-lock"></i></span>
     <span class="room-name" th:text="${roomName}">群聊</span>
     (<span id="room-user-count">0</span>)
+
+    <div class="box-btn-invite">
+        <button type="button" class="layui-btn  layui-btn-radius layui-btn-xs" onclick="btnClickInvite()">邀请</button>
+    </div>
 </header>
 
 <div class="main-container">
@@ -201,13 +207,21 @@
     <div class="layer-box">
         <div class="box-invite">
 
-            xxx 想邀请你加入 xxx房间？
+            <div class="box-invite-container">
+                <div class="box-invite-img" id="box-invite-img">
+                    <div class="title">xxx 想邀请你加入 xxx房间？</div>
+                    <div class="box-img">
+                        <img class="qrcode-img" src="" id="inviteQRCodeImg" alt="" width="" />
+                    </div>
+                    <div class="tip">扫描二维码，去找他聊聊吧</div>
+                </div>
+                <div class="box-btn">
+                    <button type="button" class="layui-btn layui-btn-primary btn-download" onclick="btnClickSaveImg()">
+                        <i class="layui-icon layui-icon-download-circle"></i>
+                    </button>
+                </div>
+            </div>
 
-            <img style="-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;" src="{$shareloan}" width="90%" id="testImg">
-
-            扫描二维码，去找他聊聊吧
-
-            <span id="saveImg" οnclick="save()" style="margin-bottom:.6rem;margin-top:.6rem;"><i class="layui-icon layui-icon-download-circle"></i>下载</span>
         </div>
     </div>
 </div>

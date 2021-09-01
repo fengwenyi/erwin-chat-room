@@ -15,6 +15,7 @@ html, body {
     align-items: center;
     letter-spacing: 2px;
     border-bottom: 1px solid #222;
+    position: relative;
 }
 .header-container .room-name {
     margin-right: 6px;
@@ -22,6 +23,14 @@ html, body {
 .header-container .lock {
     margin-right: 10px;
     color: #ccc;
+}
+.header-container .box-btn-invite {
+    height: 100%;
+    position: absolute;
+    bottom: 0;
+    right: 20px;
+    display: flex;
+    align-items: center;
 }
 
 .main-container {
@@ -221,12 +230,69 @@ html, body {
     margin-left: 10px;
 }
 
+
+.box-invite {
+    padding: 30px;
+    width: 300px;
+    display: none;
+}
+.box-invite .box-invite-container {
+    width: 100%;
+
+
+}
+.box-invite .box-invite-container .box-invite-img {
+    width: 70%;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #0079c1;
+}
+.box-invite .box-invite-container .box-invite-img .title {
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    font-weight: bold;
+}
+
+.box-invite .box-invite-container .box-invite-img .box-img {
+    width: 120px;
+    height: 120px;
+    margin: 20px auto 10px;
+}
+
+.box-invite .box-invite-container .box-invite-img .qrcode-img {
+    width: 120px;
+    height: 120px;
+}
+.box-invite .box-invite-container .box-invite-img .tip {
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+    color: #ccc;
+    font-weight: lighter;
+}
+.box-invite .box-invite-container .box-btn {
+    width: 100%;
+    margin-top: 30px;
+    text-align: center;
+}
+.box-invite .box-invite-container .box-btn .btn-download i {
+    font-size: 20px;
+}
+
+
 @media only screen and (min-width: 1100px) {
     .main-container .left-container {
         display: flex;
     }
     .main-container .right-container {
         width: calc(100% - 300px);
+    }
+
+    .box-invite {
+        width: 300px;
     }
 }
 @media only screen and (max-width: 1100px) {
@@ -235,5 +301,8 @@ html, body {
     }
     .main-container .right-container {
         width: 100%;
+    }
+    .box-invite {
+        width: 280px;
     }
 }

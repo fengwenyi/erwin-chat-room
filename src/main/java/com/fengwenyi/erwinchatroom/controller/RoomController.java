@@ -59,10 +59,10 @@ public class RoomController {
         return roomService.getUserList(rid);
     }
 
-    @PostMapping("{rid}/invite")
+    @GetMapping("{rid}/invite")
     public ResultTemplate<?> invite(@PathVariable String rid, String inviteUid) {
         LocalDateTime inviteTime = LocalDateTime.now();
-        String inviteId = IdUtils.genId();
+        String inviteId;
 
         RoomInviteEntity queryEntity = new RoomInviteEntity().setRid(rid).setInviteUid(inviteUid);
 
@@ -72,6 +72,7 @@ public class RoomController {
 
         RoomInviteEntity entity;
         if (CollectionUtils.isEmpty(list)) {
+            inviteId = IdUtils.genId();
             entity = new RoomInviteEntity()
                     .setRid(rid)
                     .setInviteUid(inviteUid)
@@ -80,12 +81,13 @@ public class RoomController {
             roomInviteRepository.save(entity);
         } else {
             entity = list.get(0);
+            inviteId = entity.getId();
         }
 
         String inviteUrl = "http://localhost:8080" +
                 "/invite?" +
                 "id=" + inviteId +
-                "&rid=" + entity.getId() +
+                "&rid=" + rid +
                 "&inviteUid" + inviteUid +
                 "&it=" + DateTimeUtils.toMillisecond(inviteTime) +
                 "&ct=" + System.currentTimeMillis();

@@ -10,8 +10,8 @@ layui.use(function() {
     let host = window.location.host;
 
     let lastReceiveMsgTimestamp = 0;
-    let socket;
     let stompClient = {};
+    let layerIndex;
 
     let needClose = false;
 
@@ -333,6 +333,161 @@ layui.use(function() {
                 alertFail(response.msg)
             }
         });
+    }
+
+    // 点击邀请按钮
+    window.btnClickInvite = function btnClickInvite() {
+
+        handleGenInviteQRCodeImg();
+
+        layerIndex = layer.open({
+            type: 1,
+            title: '邀请',
+            // closeBtn: 1, //不显示关闭按钮
+            anim: 5,
+            shade: [0.5],
+            area: ['', ''],
+            shadeClose: true, //开启遮罩关闭
+            content: jQuery('.box-invite')
+        });
+    }
+
+    function handleGenInviteQRCodeImg() {
+        apiGetRoomInviteUrl();
+    }
+
+    // api 获取邀请邀请url
+    function apiGetRoomInviteUrl() {
+        let url = '/room/' + rid + '/invite?inviteUid=' + getUid();
+        ajaxGet(jQuery, layer, url, function (response) {
+            if (response.success) {
+                let inviteUrl = response.body;
+                console.log(inviteUrl);
+                apiUrlConversionQRCodeBase64(inviteUrl);
+            } else {
+                alertFail(response.msg);
+            }
+        });
+    }
+
+    // url 转 二维码 base64
+    function apiUrlConversionQRCodeBase64(inviteUrl) {
+        let data = {};
+        data.url = inviteUrl;
+        ajaxPost(jQuery, layer, '/qr-code/generator', JSON.stringify(data), function (response) {
+            if (response.success) {
+                let imgBase64 = response.body;
+                console.log(imgBase64);
+                jQuery('#inviteQRCodeImg').attr('src', 'data:image/png;base64,' + imgBase64);
+            } else {
+                alertFail(response.msg);
+            }
+        });
+    }
+
+    window.btnClickSaveImg = function () {
+        // saveImg();
+        // saveImg2();
+        saveImg3();
+    };
+
+    function saveImg2() {
+        let newCanvas= document.createElement("canvas");
+        w = window.getComputedStyle(document.getElementById("box-invite-img")).width
+        h= window.getComputedStyle(document.getElementById("box-invite-img")).height
+        newCanvas.width = w * 2;
+        newCanvas.height = h * 2;
+        newCanvas.style.width = w + "px";
+        newCanvas.style.height = h + "px";
+        let context = newCanvas.getContext("2d");
+        context.scale(2, 2);
+        html2canvas(document.getElementById("box-invite-img"), newCanvas).then(function(canvas) {
+            //canvas转换成url，然后利用a标签的download属性，直接下载
+            let a = document.createElement("a");
+            a.href = canvas.toDataURL();
+            //设置下载文件的名字
+            a.download = "下载.jpg";
+            //点击
+            a.click();
+        });
+    }
+
+    function saveImg3() {
+        let fileName = new Date().getTime().toString(16) + Math.ceil(Math.random() * 10000).toString(16);
+        html2canvas(document.getElementById("box-invite-img")).then(function(canvas) {
+            //canvas转换成url，然后利用a标签的download属性，直接下载
+            let a = document.createElement("a");
+            a.href = canvas.toDataURL('image/jpeg', 1.0);
+            //设置下载文件的名字
+            a.download = fileName + ".jpg";
+            //点击
+            a.click();
+        });
+    }
+
+    function saveImg() {
+        var getPixelRatio = function (context) { // 获取设备的PixelRatio
+            var backingStore = context.backingStorePixelRatio ||
+                context.webkitBackingStorePixelRatio ||
+                context.mozBackingStorePixelRatio ||
+                context.msBackingStorePixelRatio ||
+                context.oBackingStorePixelRatio ||
+                context.backingStorePixelRatio || 0.5;
+            return (window.devicePixelRatio || 0.5) / backingStore;
+        };
+        //生成的图片名称
+        var imgName = "cs.jpg";
+        var shareContent = document.getElementById("box-invite-img");
+        var width = shareContent.offsetWidth;
+        var height = shareContent.offsetHeight;
+        var canvas = document.createElement("canvas");
+        var context = canvas.getContext('2d');
+        var scale = getPixelRatio(context); //将canvas的容器扩大PixelRatio倍，再将画布缩放，将图像放大PixelRatio倍。
+        canvas.width = width * scale;
+        canvas.height = height * scale;
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
+        context.scale(scale, scale);
+
+        var opts = {
+            scale: scale,
+            canvas: canvas,
+            width: width,
+            height: height,
+            dpi: window.devicePixelRatio
+        };
+        html2canvas(shareContent, opts).then(function (canvas) {
+            context.imageSmoothingEnabled = false;
+            context.webkitImageSmoothingEnabled = false;
+            context.msImageSmoothingEnabled = false;
+            context.imageSmoothingEnabled = false;
+            var dataUrl = canvas.toDataURL('image/jpeg', 1.0);
+            dataURIToBlob(imgName, dataUrl, callback);
+        });
+    }
+
+
+    // edited from https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob#Polyfill
+    var dataURIToBlob =  function (imgName, dataURI, callback) {
+        var binStr = atob(dataURI.split(',')[1]),
+            len = binStr.length,
+            arr = new Uint8Array(len);
+
+        for (var i = 0; i < len; i++) {
+            arr[i] = binStr.charCodeAt(i);
+        }
+
+        callback(imgName, new Blob([arr]));
+    }
+
+    var callback = function (imgName, blob) {
+        var triggerDownload = jQuery("<a>").attr("href", URL.createObjectURL(blob)).attr("download", imgName).appendTo("body").on("click", function () {
+            if (navigator.msSaveBlob) {
+                return navigator.msSaveBlob(blob, imgName);
+            }
+        });
+        triggerDownload[0].click();
+        triggerDownload.remove();
     }
 
 });
