@@ -3,8 +3,10 @@ package com.fengwenyi.erwinchatroom.controller;
 import com.fengwenyi.api.result.ResultTemplate;
 import com.fengwenyi.erwinchatroom.entity.RoomEntity;
 import com.fengwenyi.erwinchatroom.entity.RoomInviteEntity;
+import com.fengwenyi.erwinchatroom.entity.UserEntity;
 import com.fengwenyi.erwinchatroom.repository.IRoomInviteRepository;
 import com.fengwenyi.erwinchatroom.repository.IRoomRepository;
+import com.fengwenyi.erwinchatroom.repository.IUserRepository;
 import com.fengwenyi.erwinchatroom.utils.CacheKeyUtils;
 import com.fengwenyi.erwinchatroom.utils.UserUtils;
 import com.fengwenyi.javalib.convert.DateTimeUtils;
@@ -37,6 +39,9 @@ public class ViewController {
 
     @Autowired
     private IRoomRepository roomRepository;
+
+    @Autowired
+    private IUserRepository userRepository;
 
     @Autowired
     private Cache<Object, Object> cache;
@@ -105,13 +110,21 @@ public class ViewController {
     // 邀请
     @GetMapping("/invite")
     public String invite(String rid, String inviteUid, Model model) {
-        /*Optional<RoomEntity> optionalRoom = roomRepository.findById(rid);
+        Optional<RoomEntity> optionalRoom = roomRepository.findById(rid);
+        model.addAttribute("rid", rid);
         if (optionalRoom.isPresent()) {
             RoomEntity roomEntity = optionalRoom.get();
+            model.addAttribute("roomName", roomEntity.getName());
             if (roomEntity.getNeedPassword()) {
                 String token = IdUtils.genId();
+                model.addAttribute("token", token);
             }
-        }*/
+        }
+        Optional<UserEntity> optionalUser = userRepository.findById(inviteUid);
+        if (optionalUser.isPresent()) {
+            UserEntity userEntity = optionalUser.get();
+            model.addAttribute("userNickname", userEntity.getNickname());
+        }
         return "invite";
     }
 }

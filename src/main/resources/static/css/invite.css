@@ -33,3 +33,9 @@
     justify-content: space-around;
 
 }
+
+.box-update-user {
+    padding: 30px;
+    width: 300px;
+    display: none;
+}

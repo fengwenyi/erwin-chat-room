@@ -26,7 +26,7 @@ layui.use(function () {
         }
         layerIndex = layer.open({
             type: 1,
-            title: '设置',
+            title: '设置昵称',
             closeBtn: 1, //不显示关闭按钮
             anim: 5,
             shade: [0.5],

@@ -3,10 +3,15 @@ package com.fengwenyi.erwinchatroom.controller;
 import com.fengwenyi.api.result.PageRequest;
 import com.fengwenyi.api.result.PageTemplate;
 import com.fengwenyi.api.result.ResultTemplate;
+import com.fengwenyi.erwinchatroom.entity.RoomEntity;
 import com.fengwenyi.erwinchatroom.entity.RoomInviteEntity;
+import com.fengwenyi.erwinchatroom.entity.UserEntity;
 import com.fengwenyi.erwinchatroom.repository.IRoomInviteRepository;
+import com.fengwenyi.erwinchatroom.repository.IRoomRepository;
+import com.fengwenyi.erwinchatroom.repository.IUserRepository;
 import com.fengwenyi.erwinchatroom.service.IRoomService;
 import com.fengwenyi.erwinchatroom.vo.request.RoomRequestVo;
+import com.fengwenyi.erwinchatroom.vo.response.RoomInviteResponseVo;
 import com.fengwenyi.erwinchatroom.vo.response.RoomResponseVo;
 import com.fengwenyi.erwinchatroom.vo.response.UserResponseVo;
 import com.fengwenyi.javalib.convert.DateTimeUtils;
@@ -19,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author <a href="https://www.fengwenyi.com">Erwin Feng</a>
@@ -33,6 +39,12 @@ public class RoomController {
 
     @Autowired
     private IRoomInviteRepository roomInviteRepository;
+
+    @Autowired
+    private IRoomRepository roomRepository;
+
+    @Autowired
+    private IUserRepository userRepository;
 
     @PostMapping("/create")
     public ResultTemplate<RoomResponseVo> create(@RequestBody @Validated RoomRequestVo requestVo) {
@@ -60,7 +72,7 @@ public class RoomController {
     }
 
     @GetMapping("{rid}/invite")
-    public ResultTemplate<?> invite(@PathVariable String rid, String inviteUid) {
+    public ResultTemplate<RoomInviteResponseVo> invite(@PathVariable String rid, String inviteUid) {
         LocalDateTime inviteTime = LocalDateTime.now();
         String inviteId;
 
@@ -84,14 +96,24 @@ public class RoomController {
             inviteId = entity.getId();
         }
 
-        String inviteUrl = "http://localhost:8080" +
+        Optional<RoomEntity> optionalRoom = roomRepository.findById(rid);
+        Optional<UserEntity> optionalUser = userRepository.findById(inviteUid);
+
+//        String inviteUrl = "http://localhost:8080" +
+        String inviteUrl = "http://192.168.3.200:8080" +
                 "/invite?" +
                 "id=" + inviteId +
                 "&rid=" + rid +
-                "&inviteUid" + inviteUid +
+                "&inviteUid=" + inviteUid +
                 "&it=" + DateTimeUtils.toMillisecond(inviteTime) +
                 "&ct=" + System.currentTimeMillis();
 
-        return ResultTemplate.success(inviteUrl);
+        RoomInviteResponseVo responseVo = new RoomInviteResponseVo()
+                .setInviteUrl(inviteUrl)
+                .setRoomName(optionalRoom.isPresent() ? optionalRoom.get().getName() : "")
+                .setUserNickname(optionalUser.isPresent() ? optionalUser.get().getNickname() : "")
+                ;
+
+        return ResultTemplate.success(responseVo);
     }
 }

@@ -25,6 +25,36 @@
 
     <script src="/static/util/Common.js"></script>
 
+    <script th:inline="javascript">
+
+        let token = [[${token}]];
+        let rid = [[${rid}]];
+
+        layui.use(function() {
+            let layer = layui.layer
+                , jQuery = layui.jquery;
+
+            let error = [[${error}]];
+            let msg = [[${msg}]];
+
+
+
+            if (error) {
+
+                layer.alert(
+                    msg, {icon: 5},
+                    function () {
+                        window.location.href = "/";
+                    });
+            }
+
+
+            if (isNotEmpty(token)) {
+                setRoomUserAuthToken(rid, token);
+            }
+        });
+    </script>
+
     <script src="/static/js/invite.js"></script>
 </head>
 <body>
@@ -54,11 +84,24 @@ xxx 邀请你加入 xx 房间？
 <div class="main-container">
     <div class="box-title">房间邀请</div>
     <div class="box-content">
-        <span>xxx</span> 想邀请你加入 <span>xxx</span> 房间？
+        <span th:text="${userNickname}">xxx</span>想邀请你加入《<span th:text="${roomName}">xxx</span>》房间？
     </div>
     <div class="box-btn">
-        <button type="button" class="layui-btn layui-btn-primary ">拒绝</button>
-        <button type="button" class="layui-btn">加入</button>
+        <button type="button" class="layui-btn layui-btn-primary" onclick="btnClickRefuse()">拒绝</button>
+        <button type="button" class="layui-btn" onclick="btnClickJoinInRoom()">加入</button>
+    </div>
+</div>
+
+<div class="layer-box">
+    <div class="box-update-user">
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <input type="text" name="nickname" required  lay-verify="required" placeholder="请输入昵称" autocomplete="off" class="layui-input" maxlength="20">
+            </div>
+            <div class="layui-form-item btn-panel">
+                <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="formUpdateUser">立即提交</button>
+            </div>
+        </form>
     </div>
 </div>
 

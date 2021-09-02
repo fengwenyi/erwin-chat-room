@@ -87,9 +87,4 @@ public class AuthController {
         return ResultTemplate.success(new RoomUserAuthResponseVo().setToken(token));
     }
 
-    @PostMapping("/join-in")
-    public void joinIn() { // 参数：rid, inviteUid, uid, token
-
-    }
-
 }
