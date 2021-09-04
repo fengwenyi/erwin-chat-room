@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -83,8 +84,15 @@ public class RoomServiceImpl implements IRoomService {
     public ResultTemplate<PageTemplate<List<RoomResponseVo>>> getPage(PageRequest<?> pageRequest) {
         Long currentPage = pageRequest.getCurrentPage();
         Integer pageSize = pageRequest.getPageSize();
+
+        List<Sort.Order> orders = new ArrayList<>();
+
+        orders.add(Sort.Order.asc("needPassword"));
+        orders.add(Sort.Order.desc("userCount"));
+        orders.add(Sort.Order.asc("createTime"));
+
         org.springframework.data.domain.PageRequest
-                pageRequest1 = org.springframework.data.domain.PageRequest.of(currentPage.intValue() - 1, pageSize, Sort.by("userCount", "createTime"));
+                pageRequest1 = org.springframework.data.domain.PageRequest.of(currentPage.intValue() - 1, pageSize, Sort.by(orders));
         Page<RoomEntity> pageResult = roomRepository.findAll(pageRequest1);
         List<RoomResponseVo> list = pageResult.toList().stream()
                 .map(entity -> {
@@ -113,7 +121,7 @@ public class RoomServiceImpl implements IRoomService {
 
     @Override
     public ResultTemplate<RoomResponseVo> get(String rid) {
-        log.debug("rid={}", rid);
+//        log.debug("rid={}", rid);
         Optional<RoomEntity> optionalRoom = roomRepository.findById(rid);
         if (!optionalRoom.isPresent()) {
             return ResultTemplate.fail("房间ID不正确");

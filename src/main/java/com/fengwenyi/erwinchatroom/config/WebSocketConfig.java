@@ -1,7 +1,6 @@
 package com.fengwenyi.erwinchatroom.config;
 
 import com.fengwenyi.erwinchatroom.interceptor.ChatRoomInterceptor;
-import com.fengwenyi.erwinchatroom.interceptor.RoomInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;

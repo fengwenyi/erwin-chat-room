@@ -35,7 +35,7 @@ public class ChatServiceImpl implements IChatService {
     @Override
     public ResultTemplate<Void> room(ChatMessageRequestVo requestVo) {
 
-        log.debug("请求参数={}", JsonUtils.convertString(requestVo));
+//        log.debug("请求参数={}", JsonUtils.convertString(requestVo));
 
         Optional<UserEntity> optionalUser = userRepository.findById(requestVo.getUid());
 
@@ -64,7 +64,7 @@ public class ChatServiceImpl implements IChatService {
 
         ResultTemplate<?> result = ResultTemplate.success(chatMessageResponseVo);
 
-        log.debug("发送的消息：{}", JsonUtils.convertString(result));
+//        log.debug("发送的消息：{}", JsonUtils.convertString(result));
 
         msgService.sendToRoom(requestVo.getRid(), result);
 

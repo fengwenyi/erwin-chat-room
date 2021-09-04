@@ -32,7 +32,12 @@ layui.use(function() {
 
     function connect() {
 
-        let wsUrl = 'http://' + host + '/ws';
+        // let wsUrl = 'http://' + host + '/ws';
+        let wsUrl = '/ws?rid=' + rid + '&uid=' + getUid() + '&ct=' + new Date().getTime();
+        let token = getRoomUserAuthToken(rid);
+        if (isNotEmpty(token)) {
+            wsUrl += '&token=' + token;
+        }
 
         let sock = new SockJS(wsUrl);
         stompClient = Stomp.over(sock);//使用STMOP子协议的WebSocket客户端
