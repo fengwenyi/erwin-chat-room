@@ -174,4 +174,15 @@ public class RoomServiceImpl implements IRoomService {
         }).filter(Objects::nonNull).collect(Collectors.toList());
         return ResultTemplate.success(responseVoList);
     }
+
+    @Override
+    public void deleteEmpty() {
+        // 删除空房间
+        RoomEntity roomEntity = new RoomEntity()
+                .setUserCount(0)
+                ;
+        Example<RoomEntity> example = Example.of(roomEntity);
+        List<RoomEntity> list = roomRepository.findAll(example);
+        roomRepository.deleteAll(list);
+    }
 }

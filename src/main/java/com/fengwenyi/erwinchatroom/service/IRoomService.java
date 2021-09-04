@@ -49,4 +49,6 @@ public interface IRoomService {
      * @return 用户列表
      */
     ResultTemplate<List<UserResponseVo>> getUserList(String rid);
+
+    void deleteEmpty();
 }
