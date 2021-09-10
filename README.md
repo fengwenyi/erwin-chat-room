@@ -38,9 +38,4 @@ docker logs -f erwin-chat-room
 
 ## 更新日志
 
-### v1.0.0
-
-2021.08.15
-
-- 基于 `javax.websocket.*` 开发，原生注解。
-- 网页聊天室初版发布。
+[更新日志](LOG.md)
