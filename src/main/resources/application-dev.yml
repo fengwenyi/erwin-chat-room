@@ -24,3 +24,5 @@ spring:
 logging:
   level:
     com.fengwenyi: debug
+
+domain: http://localhost:8080

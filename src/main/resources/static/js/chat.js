@@ -33,7 +33,8 @@ layui.use(function() {
     function connect() {
 
         // let wsUrl = 'http://' + host + '/ws';
-        let wsUrl = '/ws?rid=' + rid + '&uid=' + getUid() + '&ct=' + new Date().getTime();
+        // let wsUrl = '/ws?rid=' + rid + '&uid=' + getUid() + '&ct=' + new Date().getTime();
+        let wsUrl = domain + '/ws?rid=' + rid + '&uid=' + getUid() + '&ct=' + new Date().getTime();
         let token = getRoomUserAuthToken(rid);
         if (isNotEmpty(token)) {
             wsUrl += '&token=' + token;
@@ -371,7 +372,7 @@ layui.use(function() {
                 let roomName = response.body.roomName;
                 let userNickname = response.body.userNickname;
                 let inviteUrl = response.body.inviteUrl;
-                console.log(inviteUrl);
+                //console.log(inviteUrl);
                 apiUrlConversionQRCodeBase64(inviteUrl);
                 handleSetInviteInfo(roomName, userNickname);
             } else {
@@ -387,7 +388,7 @@ layui.use(function() {
         ajaxPost(jQuery, layer, '/qr-code/generator', JSON.stringify(data), function (response) {
             if (response.success) {
                 let imgBase64 = response.body;
-                console.log(imgBase64);
+                //console.log(imgBase64);
                 jQuery('#inviteQRCodeImg').attr('src', 'data:image/png;base64,' + imgBase64);
             } else {
                 alertFail(response.msg);

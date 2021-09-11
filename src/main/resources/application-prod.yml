@@ -20,3 +20,5 @@ spring:
       settings:
         trace: false
         web-allow-others: false
+
+domain: https://chat-room.fengwenyi.com

@@ -17,11 +17,13 @@ import com.fengwenyi.erwinchatroom.vo.response.UserResponseVo;
 import com.fengwenyi.javalib.convert.DateTimeUtils;
 import com.fengwenyi.javalib.generate.IdUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Example;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -45,6 +47,9 @@ public class RoomController {
 
     @Autowired
     private IUserRepository userRepository;
+
+    @Value("${domain}")
+    private String domain;
 
     @PostMapping("/create")
     public ResultTemplate<RoomResponseVo> create(@RequestBody @Validated RoomRequestVo requestVo) {
@@ -72,7 +77,7 @@ public class RoomController {
     }
 
     @GetMapping("{rid}/invite")
-    public ResultTemplate<RoomInviteResponseVo> invite(@PathVariable String rid, String inviteUid) {
+    public ResultTemplate<RoomInviteResponseVo> invite(@PathVariable String rid, String inviteUid, HttpServletRequest request) {
         LocalDateTime inviteTime = LocalDateTime.now();
         String inviteId;
 
@@ -99,8 +104,7 @@ public class RoomController {
         Optional<RoomEntity> optionalRoom = roomRepository.findById(rid);
         Optional<UserEntity> optionalUser = userRepository.findById(inviteUid);
 
-//        String inviteUrl = "http://localhost:8080" +
-        String inviteUrl = "http://192.168.3.200:8080" +
+        String inviteUrl = domain +
                 "/invite?" +
                 "id=" + inviteId +
                 "&rid=" + rid +
