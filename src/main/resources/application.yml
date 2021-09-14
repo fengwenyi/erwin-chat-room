@@ -6,7 +6,7 @@ spring:
   application:
     name: erwin-chat-room
   profiles:
-    active: prod
+    active: dev
 
   thymeleaf:
     enabled: true

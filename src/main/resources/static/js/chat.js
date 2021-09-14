@@ -34,7 +34,7 @@ layui.use(function() {
 
         // let wsUrl = 'http://' + host + '/ws';
         // let wsUrl = '/ws?rid=' + rid + '&uid=' + getUid() + '&ct=' + new Date().getTime();
-        let wsUrl = domain + '/ws?rid=' + rid + '&uid=' + getUid() + '&ct=' + new Date().getTime();
+        let wsUrl = domain + '/portfolio?rid=' + rid + '&uid=' + getUid() + '&ct=' + new Date().getTime();
         let token = getRoomUserAuthToken(rid);
         if (isNotEmpty(token)) {
             wsUrl += '&token=' + token;

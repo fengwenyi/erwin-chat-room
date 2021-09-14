@@ -26,7 +26,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws").setAllowedOrigins(domain).withSockJS().setInterceptors(roomInterceptor);
+        registry.addEndpoint("/portfolio").setAllowedOrigins(domain).withSockJS().setInterceptors(roomInterceptor);
     }
 
     @Override
@@ -37,9 +37,4 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.setApplicationDestinationPrefixes("/app");
     }
 
-    @Override
-    public void configureClientInboundChannel(ChannelRegistration registration) {
-        //WebSocketMessageBrokerConfigurer.super.configureClientInboundChannel(registration);
-        //registration.interceptors(roomInterceptor);
-    }
 }
