@@ -1,8 +1,6 @@
 package com.fengwenyi.erwinchatroom.controller;
 
-import com.fengwenyi.api.result.PageRequest;
-import com.fengwenyi.api.result.PageTemplate;
-import com.fengwenyi.api.result.ResultTemplate;
+import com.fengwenyi.api.result.*;
 import com.fengwenyi.erwinchatroom.entity.RoomEntity;
 import com.fengwenyi.erwinchatroom.entity.RoomInviteEntity;
 import com.fengwenyi.erwinchatroom.entity.UserEntity;
@@ -57,7 +55,7 @@ public class RoomController {
     }
 
     @PostMapping("/getPage")
-    public ResultTemplate<PageTemplate<List<RoomResponseVo>>> getPage(@RequestBody PageRequest<?> pageRequest) {
+    public ResultTemplate<PageResponseVo<List<RoomResponseVo>>> getPage(@RequestBody PageRequestVo<?> pageRequest) {
         return roomService.getPage(pageRequest);
     }
 

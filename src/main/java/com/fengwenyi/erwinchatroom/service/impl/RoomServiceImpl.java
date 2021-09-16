@@ -1,7 +1,7 @@
 package com.fengwenyi.erwinchatroom.service.impl;
 
-import com.fengwenyi.api.result.PageRequest;
-import com.fengwenyi.api.result.PageTemplate;
+import com.fengwenyi.api.result.PageRequestVo;
+import com.fengwenyi.api.result.PageResponseVo;
 import com.fengwenyi.api.result.ResultTemplate;
 import com.fengwenyi.apistarter.utils.Asserts;
 import com.fengwenyi.erwinchatroom.entity.RoomEntity;
@@ -16,13 +16,12 @@ import com.fengwenyi.erwinchatroom.vo.request.RoomRequestVo;
 import com.fengwenyi.erwinchatroom.vo.response.RoomResponseVo;
 import com.fengwenyi.erwinchatroom.vo.response.UserResponseVo;
 import com.fengwenyi.javalib.convert.DateTimeUtils;
-import com.fengwenyi.javalib.convert.JsonUtils;
 import com.fengwenyi.javalib.generate.IdUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -81,9 +80,9 @@ public class RoomServiceImpl implements IRoomService {
     }
 
     @Override
-    public ResultTemplate<PageTemplate<List<RoomResponseVo>>> getPage(PageRequest<?> pageRequest) {
-        Long currentPage = pageRequest.getCurrentPage();
-        Integer pageSize = pageRequest.getPageSize();
+    public ResultTemplate<PageResponseVo<List<RoomResponseVo>>> getPage(PageRequestVo<?> pageRequestVo) {
+        Long currentPage = pageRequestVo.getCurrentPage();
+        Integer pageSize = pageRequestVo.getPageSize();
 
         List<Sort.Order> orders = new ArrayList<>();
 
@@ -91,9 +90,8 @@ public class RoomServiceImpl implements IRoomService {
         orders.add(Sort.Order.desc("userCount"));
         orders.add(Sort.Order.asc("createTime"));
 
-        org.springframework.data.domain.PageRequest
-                pageRequest1 = org.springframework.data.domain.PageRequest.of(currentPage.intValue() - 1, pageSize, Sort.by(orders));
-        Page<RoomEntity> pageResult = roomRepository.findAll(pageRequest1);
+        PageRequest pageRequest = PageRequest.of(currentPage.intValue() - 1, pageSize, Sort.by(orders));
+        Page<RoomEntity> pageResult = roomRepository.findAll(pageRequest);
         List<RoomResponseVo> list = pageResult.toList().stream()
                 .map(entity -> {
                     UserEntity userEntity = userRepository.findById(entity.getCreateUserUid()).orElse(null);
@@ -108,7 +106,7 @@ public class RoomServiceImpl implements IRoomService {
                             ;
                 })
                 .collect(Collectors.toList());
-        PageTemplate<List<RoomResponseVo>> pageTemplate = new PageTemplate<List<RoomResponseVo>>()
+        PageResponseVo<List<RoomResponseVo>> pageResponseVo = new PageResponseVo<List<RoomResponseVo>>()
                 .setCurrentPage((long) pageResult.getNumber() + 1)
                 .setPageSize(pageResult.getSize())
                 .setTotalPages((long) pageResult.getTotalPages())
@@ -116,7 +114,7 @@ public class RoomServiceImpl implements IRoomService {
                 .setContent(list)
                 ;
 
-        return ResultTemplate.success(pageTemplate);
+        return ResultTemplate.success(pageResponseVo);
     }
 
     @Override

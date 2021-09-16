@@ -1,8 +1,6 @@
 package com.fengwenyi.erwinchatroom.service;
 
-import com.fengwenyi.api.result.PageRequest;
-import com.fengwenyi.api.result.PageTemplate;
-import com.fengwenyi.api.result.ResultTemplate;
+import com.fengwenyi.api.result.*;
 import com.fengwenyi.erwinchatroom.vo.request.RoomRequestVo;
 import com.fengwenyi.erwinchatroom.vo.response.RoomResponseVo;
 import com.fengwenyi.erwinchatroom.vo.response.UserResponseVo;
@@ -27,7 +25,7 @@ public interface IRoomService {
      * @param pageRequest
      * @return
      */
-    ResultTemplate<PageTemplate<List<RoomResponseVo>>> getPage(PageRequest<?> pageRequest);
+    ResultTemplate<PageResponseVo<List<RoomResponseVo>>> getPage(PageRequestVo<?> pageRequest);
 
     /**
      * 根据id查询

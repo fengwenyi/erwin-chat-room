@@ -3,9 +3,9 @@
 ## 快速开始
 
 ```shell
-docker pull fengwenyi/erwin-chat-room:1.1.1
+docker pull fengwenyi/erwin-chat-room:1.1.2
 
-docker run -d -p 8080:8080 --name erwin-chat-room fengwenyi/erwin-chat-room:1.1.1
+docker run -d -p 8080:8080 --name erwin-chat-room fengwenyi/erwin-chat-room:1.1.2
 ```
 
 > http://localhost:8080
@@ -32,13 +32,13 @@ sh build.sh
 
 ```shell
 # 拉取镜像
-docker pull fengwenyi/erwin-chat-room:1.1.1
+docker pull fengwenyi/erwin-chat-room:1.1.2
 
 # 启动命令（默认预发布）
-docker run -d -p 8080:8080 --name erwin-chat-room fengwenyi/erwin-chat-room:1.1.1
+docker run -d -p 8080:8080 --name erwin-chat-room fengwenyi/erwin-chat-room:1.1.2
 
 # 启动命令（指定正式环境）
-docker run -d -p 8080:8080 --name erwin-chat-room fengwenyi/erwin-chat-room:1.1.1 --spring.profile.active=prod
+docker run -d -e active=prod -p 8080:8080 --name erwin-chat-room fengwenyi/erwin-chat-room:1.1.2
 
 # 查看日志
 docker logs -f erwin-chat-room
