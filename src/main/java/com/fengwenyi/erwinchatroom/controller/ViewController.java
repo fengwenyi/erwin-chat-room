@@ -1,5 +1,6 @@
 package com.fengwenyi.erwinchatroom.controller;
 
+import com.fengwenyi.erwinchatroom.config.ErwinProperties;
 import com.fengwenyi.erwinchatroom.entity.RoomEntity;
 import com.fengwenyi.erwinchatroom.entity.UserEntity;
 import com.fengwenyi.erwinchatroom.repository.IRoomRepository;
@@ -9,7 +10,6 @@ import com.fengwenyi.javalib.generate.IdUtils;
 import com.github.benmanes.caffeine.cache.Cache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -37,8 +37,7 @@ public class ViewController {
     @Autowired
     private Cache<Object, Object> cache;
 
-    @Value("${domain}")
-    private String domain;
+    private ErwinProperties erwinProperties;
 
     @GetMapping("/")
     public String index(HttpSession session, HttpServletResponse response) {
@@ -65,7 +64,7 @@ public class ViewController {
             model.addAttribute("rid", rid);
             model.addAttribute("roomName", roomEntity.getName());
             model.addAttribute("needPassword", roomEntity.getNeedPassword());
-            model.addAttribute("domain", domain);
+            model.addAttribute("domain", erwinProperties.getDomain());
 
             if (roomEntity.getNeedPassword()
                     && !uid.equals(roomEntity.getCreateUserUid())
@@ -107,7 +106,7 @@ public class ViewController {
     public String invite(String rid, String inviteUid, Model model) {
         Optional<RoomEntity> optionalRoom = roomRepository.findById(rid);
         model.addAttribute("rid", rid);
-        model.addAttribute("domain", domain);
+        model.addAttribute("domain", erwinProperties.getDomain());
         if (optionalRoom.isPresent()) {
             RoomEntity roomEntity = optionalRoom.get();
             model.addAttribute("roomName", roomEntity.getName());
@@ -122,5 +121,10 @@ public class ViewController {
             model.addAttribute("userNickname", userEntity.getNickname());
         }
         return "invite";
+    }
+
+    @Autowired
+    public void setErwinProperties(ErwinProperties erwinProperties) {
+        this.erwinProperties = erwinProperties;
     }
 }

@@ -1,6 +1,9 @@
 package com.fengwenyi.erwinchatroom.controller;
 
-import com.fengwenyi.api.result.*;
+import com.fengwenyi.api.result.PageRequestVo;
+import com.fengwenyi.api.result.PageResponseVo;
+import com.fengwenyi.api.result.ResultTemplate;
+import com.fengwenyi.erwinchatroom.config.ErwinProperties;
 import com.fengwenyi.erwinchatroom.entity.RoomEntity;
 import com.fengwenyi.erwinchatroom.entity.RoomInviteEntity;
 import com.fengwenyi.erwinchatroom.entity.UserEntity;
@@ -15,7 +18,6 @@ import com.fengwenyi.erwinchatroom.vo.response.UserResponseVo;
 import com.fengwenyi.javalib.convert.DateTimeUtils;
 import com.fengwenyi.javalib.generate.IdUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Example;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
@@ -46,8 +48,7 @@ public class RoomController {
     @Autowired
     private IUserRepository userRepository;
 
-    @Value("${domain}")
-    private String domain;
+    private ErwinProperties erwinProperties;
 
     @PostMapping("/create")
     public ResultTemplate<RoomResponseVo> create(@RequestBody @Validated RoomRequestVo requestVo) {
@@ -102,7 +103,7 @@ public class RoomController {
         Optional<RoomEntity> optionalRoom = roomRepository.findById(rid);
         Optional<UserEntity> optionalUser = userRepository.findById(inviteUid);
 
-        String inviteUrl = domain +
+        String inviteUrl = erwinProperties.getDomain() +
                 "/invite?" +
                 "id=" + inviteId +
                 "&rid=" + rid +
@@ -117,5 +118,10 @@ public class RoomController {
                 ;
 
         return ResultTemplate.success(responseVo);
+    }
+
+    @Autowired
+    public void setErwinProperties(ErwinProperties erwinProperties) {
+        this.erwinProperties = erwinProperties;
     }
 }

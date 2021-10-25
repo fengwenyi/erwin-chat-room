@@ -21,4 +21,5 @@ spring:
         trace: false
         web-allow-others: false
 
-domain: https://chat-room.fengwenyi.com
+erwin:
+  domain: https://chat-room.fengwenyi.com
