@@ -14,7 +14,7 @@ public class MainTask {
     @Autowired
     private SubTask subTask;
 
-    @Scheduled(cron = "0 0 5 * * ?")
+    // @Scheduled(cron = "0 0 5 * * ?")
     public void clearRoomTask() {
         subTask.clearRoomTask();
     }
