@@ -34,7 +34,9 @@
     <header class="header-container">
         <div class="header-panel">
             <div class="left">
-                <img class="logo" src="/static/images/logo.jpg" alt="">
+                <a target="_blank" href="https://www.fengwenyi.com">
+                    <img class="logo" src="/static/images/logo.jpg" alt="logo">
+                </a>
                 <div class="title" id="title">
                     在线聊天室
                 </div>
@@ -60,8 +62,10 @@
                     <div class="back"></div>
                     <div class="content">
                         <div class="lock"><i class="layui-icon layui-icon-password"></i></div>
+                        <div class="create-time">2021-10-27 21:23</div>
                         <div class="name">房间名</div>
-                        <div class="info"><span>0</span>人在线</div>
+                        <div class="creator">张三</div>
+                        <div class="info"><i class="layui-icon layui-icon-user"></i><span class="count">0</span></div>
                     </div>
                 </div>-->
             </div>
@@ -86,7 +90,7 @@
                 <div class="layui-form-item">
                     <input type="text" name="nickname" required  lay-verify="required" placeholder="请输入昵称" autocomplete="off" class="layui-input" maxlength="20">
                 </div>
-                <div class="layui-form-item btn-panel">
+                <div class="layui-form-item">
                     <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="formUpdateUser">立即提交</button>
                 </div>
             </form>
@@ -94,12 +98,13 @@
         <div class="box-room">
             <form class="layui-form" action="">
                 <div class="layui-form-item">
+                    <div class="required">*</div>
                     <input type="text" name="name" required  lay-verify="required" placeholder="请输入房间名称" autocomplete="off" class="layui-input" maxlength="20">
                 </div>
                 <div class="layui-form-item">
                     <input type="password" name="password" placeholder="请设置房间密码" autocomplete="off" class="layui-input" maxlength="16">
                 </div>
-                <div class="layui-form-item btn-panel">
+                <div class="layui-form-item">
                     <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="formRoom">立即提交</button>
                 </div>
             </form>
@@ -110,7 +115,7 @@
                 <div class="layui-form-item">
                     <input type="password" name="password" required  lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input" maxlength="16">
                 </div>
-                <div class="layui-form-item btn-panel">
+                <div class="layui-form-item">
                     <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="formRoomAuth">立即提交</button>
                 </div>
             </form>
@@ -122,7 +127,7 @@
             <div class="box-links">
                 <a target="_blank" href="https://github.com/fengwenyi/erwin-chat-room/issues">Issues</a>
             </div>
-            <div class="box-copyright">&copy;2021 <a target="_blank" href="http://www.fengwenyi.com">Erwin Feng</a></div>
+            <div class="box-copyright"><span class="version">v1.0.2-测试版</span> Copyright &copy; 2021 <a target="_blank" href="https://www.fengwenyi.com">Erwin Feng</a></div>
         </div>
     </footer>
 

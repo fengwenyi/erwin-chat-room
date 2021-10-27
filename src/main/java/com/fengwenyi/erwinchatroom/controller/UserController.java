@@ -1,6 +1,6 @@
 package com.fengwenyi.erwinchatroom.controller;
 
-import com.fengwenyi.api.result.ResultTemplate;
+import com.fengwenyi.api.result.ResponseTemplate;
 import com.fengwenyi.erwinchatroom.service.IUserService;
 import com.fengwenyi.erwinchatroom.vo.request.UserInitRequestVo;
 import com.fengwenyi.erwinchatroom.vo.request.UserRequestVo;
@@ -22,12 +22,12 @@ public class UserController {
 
     // 用户初始化
     @PostMapping("/init")
-    public ResultTemplate<UserInitResponseVo> init(@RequestBody UserInitRequestVo requestVo) {
+    public ResponseTemplate<UserInitResponseVo> init(@RequestBody UserInitRequestVo requestVo) {
         return userService.init(requestVo);
     }
 
     @PostMapping("/update")
-    public ResultTemplate<Void> update(@RequestBody @Validated UserRequestVo requestVo) {
+    public ResponseTemplate<Void> update(@RequestBody @Validated UserRequestVo requestVo) {
         return userService.update(requestVo);
     }
 

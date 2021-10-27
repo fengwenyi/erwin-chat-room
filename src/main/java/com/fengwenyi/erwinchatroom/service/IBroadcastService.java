@@ -1,6 +1,6 @@
 package com.fengwenyi.erwinchatroom.service;
 
-import com.fengwenyi.api.result.ResultTemplate;
+import com.fengwenyi.api.result.ResponseTemplate;
 import com.fengwenyi.erwinchatroom.vo.response.BroadcastMessageResponseVo;
 
 /**
@@ -9,6 +9,6 @@ import com.fengwenyi.erwinchatroom.vo.response.BroadcastMessageResponseVo;
  */
 public interface IBroadcastService {
 
-    ResultTemplate<Void> userEntryRoomTip(BroadcastMessageResponseVo responseVo);
+    ResponseTemplate<Void> userEntryRoomTip(BroadcastMessageResponseVo responseVo);
 
 }

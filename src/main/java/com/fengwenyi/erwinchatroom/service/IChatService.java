@@ -1,6 +1,6 @@
 package com.fengwenyi.erwinchatroom.service;
 
-import com.fengwenyi.api.result.ResultTemplate;
+import com.fengwenyi.api.result.ResponseTemplate;
 import com.fengwenyi.erwinchatroom.vo.request.ChatMessageRequestVo;
 
 /**
@@ -9,6 +9,6 @@ import com.fengwenyi.erwinchatroom.vo.request.ChatMessageRequestVo;
  */
 public interface IChatService {
 
-    ResultTemplate<Void> room(ChatMessageRequestVo requestVo);
+    ResponseTemplate<Void> room(ChatMessageRequestVo requestVo);
 
 }

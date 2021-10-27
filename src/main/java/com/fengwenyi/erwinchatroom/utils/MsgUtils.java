@@ -1,9 +1,8 @@
 package com.fengwenyi.erwinchatroom.utils;
 
-import com.fengwenyi.api.result.ResultTemplate;
+import com.fengwenyi.api.result.ResponseTemplate;
 import com.fengwenyi.erwinchatroom.bo.MsgBo;
 import com.fengwenyi.erwinchatroom.domain.UserChatRoomModel;
-import com.fengwenyi.erwinchatroom.domain.UserModel;
 import com.fengwenyi.erwinchatroom.enums.FromTypeEnum;
 import com.fengwenyi.erwinchatroom.enums.MsgTypeEnum;
 import com.fengwenyi.erwinchatroom.vo.response.ResponseVo;
@@ -26,7 +25,7 @@ import java.util.stream.Collectors;
 public class MsgUtils {
 
     public static void sendUserError(Session session, String msg) {
-        send(session, ResultTemplate.fail(msg));
+        send(session, ResponseTemplate.fail(msg));
     }
 
     public static void sendAll(String uid, String message) {
@@ -106,7 +105,7 @@ public class MsgUtils {
                     && model.getUid().equals(userUpLine.getUid())) {
                 continue;
             }
-            ResultTemplate<ResponseVo> result = ResultTemplate.success(
+            ResponseTemplate<ResponseVo> result = ResponseTemplate.success(
                     new ResponseVo()
                             .setFromType(bo.getFromTypeEnum().getCode())
                             .setSender(sender)
@@ -138,7 +137,7 @@ public class MsgUtils {
                     .setTimeStr(DateTimeUtils.format(senderModel.getTime(), "HH:mm:ss"))
             ;
         }
-        ResultTemplate<ResponseVo> result = ResultTemplate.success(
+        ResponseTemplate<ResponseVo> result = ResponseTemplate.success(
                 new ResponseVo()
                         .setFromType(bo.getFromTypeEnum().getCode())
                         .setSender(sender)
@@ -151,7 +150,7 @@ public class MsgUtils {
         send(userChatRoomModel.getSession(), result);
     }
 
-    private static <T> void send(Session session, ResultTemplate<T> result) {
+    private static <T> void send(Session session, ResponseTemplate<T> result) {
         try {
             session.getBasicRemote().sendText(JsonUtils.convertString(result));
         } catch (IOException e) {

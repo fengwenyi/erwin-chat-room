@@ -97,9 +97,9 @@ layui.use(function () {
                 setAvatarBgColor(avatarBgColor);
                 userNickname();
                 layer.close(layerIndex);
-                alertSuccess(layer, response.msg);
+                alertSuccess(layer, response.message);
             } else {
-                alertFail(layer, response.msg)
+                alertFail(layer, response.message)
             }
         })
     }
@@ -114,7 +114,7 @@ layui.use(function () {
             if (response.success) {
                 gotoRoom(response.body.rid)
             } else {
-                alertFail(layer, response.msg)
+                alertFail(layer, response.message)
             }
         })
     }
@@ -130,7 +130,7 @@ layui.use(function () {
                 roomList(response.body.content)
                 page(response.body.currentPage, response.body.totalRows)
             } else {
-                alertFail(layer, response.msg)
+                alertFail(layer, response.message)
             }
         })
     }
@@ -144,9 +144,7 @@ layui.use(function () {
     }
 
     function buildRoomItemHtmlContent(room) {
-        let htmlContent;
-
-        htmlContent = '<div class="room-item" id="room-' + room.rid + '" onclick="enterRoom(\'' + room.rid + '\')">\n' +
+        let htmlContent = '<div class="room-item" id="room-' + room.rid + '" onclick="enterRoom(\'' + room.rid + '\')">\n' +
             '                    <div class="back"></div>\n' +
             '                    <div class="content">\n';
 
@@ -154,8 +152,10 @@ layui.use(function () {
             htmlContent += '                        <div class="lock"><i class="layui-icon layui-icon-password"></i></div>\n';
         }
 
-        htmlContent += '                        <div class="name">' + room.name + '</div>\n' +
-            '                        <div class="info"><span>' + room.userCount + '</span>人在线</div>\n' +
+        htmlContent += '                        <div class="create-time">' + room.createTimeString + '</div>\n' +
+            '                        <div class="name">' + room.name + '</div>\n' +
+            '                        <div class="creator">' + room.createUserNickname + '</div>\n' +
+            '                        <div class="info"><i class="layui-icon layui-icon-user"></i><span class="count">' + room.userCount + '</span></div>\n' +
             '                    </div>\n' +
             '                </div>';
 
@@ -209,7 +209,7 @@ layui.use(function () {
                     gotoRoom(rid);
                 }
             } else {
-                alertFail(layer, response.msg);
+                alertFail(layer, response.message);
             }
         });
     }
@@ -257,7 +257,7 @@ layui.use(function () {
                 setRoomUserAuthToken(rid, response.body.token);
                 gotoRoom(rid);
             } else {
-                alertFail(layer, response.msg);
+                alertFail(layer, response.message);
             }
         });
     }

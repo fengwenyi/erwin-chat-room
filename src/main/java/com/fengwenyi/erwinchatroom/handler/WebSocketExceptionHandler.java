@@ -1,10 +1,9 @@
 package com.fengwenyi.erwinchatroom.handler;
 
 import com.fengwenyi.api.result.IReturnCode;
-import com.fengwenyi.api.result.ResultTemplate;
+import com.fengwenyi.api.result.ResponseTemplate;
 import com.fengwenyi.apistarter.exception.ApiException;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -18,16 +17,16 @@ import java.util.Objects;
 public class WebSocketExceptionHandler {
 
     @MessageExceptionHandler(value = ApiException.class)
-    public ResultTemplate<Void> handleException(ApiException exception) {
+    public ResponseTemplate<Void> handleException(ApiException exception) {
         IReturnCode returnCode = exception.getReturnCode();
         String message = exception.getMessage();
         if (Objects.isNull(returnCode)) {
-            return ResultTemplate.fail(message);
+            return ResponseTemplate.fail(message);
         }
         if (!StringUtils.hasText(message)) {
-            return ResultTemplate.fail(returnCode);
+            return ResponseTemplate.fail(returnCode);
         }
-        return ResultTemplate.fail(returnCode, message);
+        return ResponseTemplate.fail(returnCode, message);
     }
 
 }

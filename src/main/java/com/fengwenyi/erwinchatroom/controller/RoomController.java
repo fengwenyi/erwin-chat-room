@@ -2,7 +2,7 @@ package com.fengwenyi.erwinchatroom.controller;
 
 import com.fengwenyi.api.result.PageRequestVo;
 import com.fengwenyi.api.result.PageResponseVo;
-import com.fengwenyi.api.result.ResultTemplate;
+import com.fengwenyi.api.result.ResponseTemplate;
 import com.fengwenyi.erwinchatroom.config.ErwinProperties;
 import com.fengwenyi.erwinchatroom.entity.RoomEntity;
 import com.fengwenyi.erwinchatroom.entity.RoomInviteEntity;
@@ -51,32 +51,32 @@ public class RoomController {
     private ErwinProperties erwinProperties;
 
     @PostMapping("/create")
-    public ResultTemplate<RoomResponseVo> create(@RequestBody @Validated RoomRequestVo requestVo) {
+    public ResponseTemplate<RoomResponseVo> create(@RequestBody @Validated RoomRequestVo requestVo) {
         return roomService.create(requestVo);
     }
 
     @PostMapping("/getPage")
-    public ResultTemplate<PageResponseVo<List<RoomResponseVo>>> getPage(@RequestBody PageRequestVo<?> pageRequest) {
+    public ResponseTemplate<PageResponseVo<List<RoomResponseVo>>> getPage(@RequestBody PageRequestVo<?> pageRequest) {
         return roomService.getPage(pageRequest);
     }
 
     @GetMapping("/{rid}")
-    public ResultTemplate<RoomResponseVo> get(@PathVariable String rid) {
+    public ResponseTemplate<RoomResponseVo> get(@PathVariable String rid) {
         return roomService.get(rid);
     }
 
     @GetMapping("/{rid}/user-count")
-    public ResultTemplate<String> getUserCount(@PathVariable String rid) {
+    public ResponseTemplate<String> getUserCount(@PathVariable String rid) {
         return roomService.getUserCount(rid);
     }
 
     @GetMapping("/{rid}/users")
-    public ResultTemplate<List<UserResponseVo>> getUserList(@PathVariable String rid) {
+    public ResponseTemplate<List<UserResponseVo>> getUserList(@PathVariable String rid) {
         return roomService.getUserList(rid);
     }
 
     @GetMapping("{rid}/invite")
-    public ResultTemplate<RoomInviteResponseVo> invite(@PathVariable String rid, String inviteUid, HttpServletRequest request) {
+    public ResponseTemplate<RoomInviteResponseVo> invite(@PathVariable String rid, String inviteUid, HttpServletRequest request) {
         LocalDateTime inviteTime = LocalDateTime.now();
         String inviteId;
 
@@ -117,7 +117,7 @@ public class RoomController {
                 .setUserNickname(optionalUser.isPresent() ? optionalUser.get().getNickname() : "")
                 ;
 
-        return ResultTemplate.success(responseVo);
+        return ResponseTemplate.success(responseVo);
     }
 
     @Autowired

@@ -18,35 +18,35 @@ public interface IRoomService {
      * @param requestVo
      * @return
      */
-    ResultTemplate<RoomResponseVo> create(RoomRequestVo requestVo);
+    ResponseTemplate<RoomResponseVo> create(RoomRequestVo requestVo);
 
     /**
      * 查询房间
      * @param pageRequest
      * @return
      */
-    ResultTemplate<PageResponseVo<List<RoomResponseVo>>> getPage(PageRequestVo<?> pageRequest);
+    ResponseTemplate<PageResponseVo<List<RoomResponseVo>>> getPage(PageRequestVo<?> pageRequest);
 
     /**
      * 根据id查询
      * @param rid 房间id
      * @return
      */
-    ResultTemplate<RoomResponseVo> get(String rid);
+    ResponseTemplate<RoomResponseVo> get(String rid);
 
     /**
      * 房间用户统计
      * @param rid
      * @return
      */
-    ResultTemplate<String> getUserCount(String rid);
+    ResponseTemplate<String> getUserCount(String rid);
 
     /**
      * 获取房间用户列表
      * @param rid 房间id
      * @return 用户列表
      */
-    ResultTemplate<List<UserResponseVo>> getUserList(String rid);
+    ResponseTemplate<List<UserResponseVo>> getUserList(String rid);
 
     void deleteEmpty();
 }

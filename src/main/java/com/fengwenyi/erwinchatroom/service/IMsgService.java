@@ -1,6 +1,6 @@
 package com.fengwenyi.erwinchatroom.service;
 
-import com.fengwenyi.api.result.ResultTemplate;
+import com.fengwenyi.api.result.ResponseTemplate;
 
 /**
  * @author <a href="https://www.fengwenyi.com">Erwin Feng</a>
@@ -8,9 +8,9 @@ import com.fengwenyi.api.result.ResultTemplate;
  */
 public interface IMsgService {
 
-    <T> void sendAll(ResultTemplate<T> resultTemplate);
+    <T> void sendAll(ResponseTemplate<T> resultTemplate);
 
-    <T> void sendToUser(String userId, ResultTemplate<T> resultTemplate);
+    <T> void sendToUser(String userId, ResponseTemplate<T> resultTemplate);
 
-    <T> void sendToRoom(String rid, ResultTemplate<T> resultTemplate);
+    <T> void sendToRoom(String rid, ResponseTemplate<T> resultTemplate);
 }

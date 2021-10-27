@@ -2,7 +2,7 @@ package com.fengwenyi.erwinchatroom.service.impl;
 
 import com.fengwenyi.api.result.PageRequestVo;
 import com.fengwenyi.api.result.PageResponseVo;
-import com.fengwenyi.api.result.ResultTemplate;
+import com.fengwenyi.api.result.ResponseTemplate;
 import com.fengwenyi.apistarter.utils.Asserts;
 import com.fengwenyi.erwinchatroom.entity.RoomEntity;
 import com.fengwenyi.erwinchatroom.entity.RoomUserEntity;
@@ -12,6 +12,7 @@ import com.fengwenyi.erwinchatroom.repository.IRoomUserRepository;
 import com.fengwenyi.erwinchatroom.repository.IUserRepository;
 import com.fengwenyi.erwinchatroom.service.IRoomService;
 import com.fengwenyi.erwinchatroom.utils.PasswordUtils;
+import com.fengwenyi.erwinchatroom.utils.Utils;
 import com.fengwenyi.erwinchatroom.vo.request.RoomRequestVo;
 import com.fengwenyi.erwinchatroom.vo.response.RoomResponseVo;
 import com.fengwenyi.erwinchatroom.vo.response.UserResponseVo;
@@ -51,7 +52,7 @@ public class RoomServiceImpl implements IRoomService {
     private IRoomUserRepository roomUserRepository;
 
     @Override
-    public ResultTemplate<RoomResponseVo> create(RoomRequestVo requestVo) {
+    public ResponseTemplate<RoomResponseVo> create(RoomRequestVo requestVo) {
         Optional<UserEntity> optionalUser = userRepository.findById(requestVo.getCreateUserUid());
         if (!optionalUser.isPresent()) {
             Asserts.fail("创建者ID不正确");
@@ -76,11 +77,11 @@ public class RoomServiceImpl implements IRoomService {
                 .setCreateUserNickname(userEntity.getNickname())
                 .setCreateTimeString(DateTimeUtils.format(roomEntity.getCreateTime(), "HH:mm"))
                 ;
-        return ResultTemplate.success(responseVo);
+        return ResponseTemplate.success(responseVo);
     }
 
     @Override
-    public ResultTemplate<PageResponseVo<List<RoomResponseVo>>> getPage(PageRequestVo<?> pageRequestVo) {
+    public ResponseTemplate<PageResponseVo<List<RoomResponseVo>>> getPage(PageRequestVo<?> pageRequestVo) {
         Long currentPage = pageRequestVo.getCurrentPage();
         Integer pageSize = pageRequestVo.getPageSize();
 
@@ -88,7 +89,7 @@ public class RoomServiceImpl implements IRoomService {
 
         orders.add(Sort.Order.asc("needPassword"));
         orders.add(Sort.Order.desc("userCount"));
-        orders.add(Sort.Order.asc("createTime"));
+        orders.add(Sort.Order.desc("createTime"));
 
         PageRequest pageRequest = PageRequest.of(currentPage.intValue() - 1, pageSize, Sort.by(orders));
         Page<RoomEntity> pageResult = roomRepository.findAll(pageRequest);
@@ -101,7 +102,8 @@ public class RoomServiceImpl implements IRoomService {
                             .setName(entity.getName())
                             .setNeedPassword(entity.getNeedPassword())
                             .setCreateUserNickname(createUserNickname)
-                            .setCreateTimeString(DateTimeUtils.format(entity.getCreateTime(), "HH:mm"))
+//                            .setCreateTimeString(DateTimeUtils.format(entity.getCreateTime(), "yyyy-HH:mm"))
+                            .setCreateTimeString(Utils.descPast(entity.getCreateTime()))
                             .setUserCount(entity.getUserCount())
                             ;
                 })
@@ -114,21 +116,21 @@ public class RoomServiceImpl implements IRoomService {
                 .setContent(list)
                 ;
 
-        return ResultTemplate.success(pageResponseVo);
+        return ResponseTemplate.success(pageResponseVo);
     }
 
     @Override
-    public ResultTemplate<RoomResponseVo> get(String rid) {
+    public ResponseTemplate<RoomResponseVo> get(String rid) {
 //        log.debug("rid={}", rid);
         Optional<RoomEntity> optionalRoom = roomRepository.findById(rid);
         if (!optionalRoom.isPresent()) {
-            return ResultTemplate.fail("房间ID不正确");
+            return ResponseTemplate.fail("房间ID不正确");
         }
 
         RoomEntity roomEntity = optionalRoom.get();
         Optional<UserEntity> optionalUser = userRepository.findById(roomEntity.getCreateUserUid());
         if (!optionalUser.isPresent()) {
-            return ResultTemplate.fail("房间创建者ID异常");
+            return ResponseTemplate.fail("房间创建者ID异常");
         }
         UserEntity userEntity = optionalUser.get();
         RoomResponseVo responseVo = new RoomResponseVo()
@@ -139,21 +141,21 @@ public class RoomServiceImpl implements IRoomService {
                 .setCreateUserNickname(userEntity.getNickname())
                 .setCreateTimeString(DateTimeUtils.format(roomEntity.getCreateTime(), "HH:mm"))
                 ;
-        return ResultTemplate.success(responseVo);
+        return ResponseTemplate.success(responseVo);
     }
 
     @Override
-    public ResultTemplate<String> getUserCount(String rid) {
+    public ResponseTemplate<String> getUserCount(String rid) {
         Optional<RoomEntity> optionalRoom = roomRepository.findById(rid);
         if (optionalRoom.isPresent()) {
             Integer userCount = optionalRoom.get().getUserCount();
-            return ResultTemplate.success(String.valueOf(userCount));
+            return ResponseTemplate.success(String.valueOf(userCount));
         }
-        return ResultTemplate.success(String.valueOf(0));
+        return ResponseTemplate.success(String.valueOf(0));
     }
 
     @Override
-    public ResultTemplate<List<UserResponseVo>> getUserList(String rid) {
+    public ResponseTemplate<List<UserResponseVo>> getUserList(String rid) {
         RoomUserEntity roomUserEntity = new RoomUserEntity().setRid(rid);
         Example<RoomUserEntity> example = Example.of(roomUserEntity);
         List<RoomUserEntity> roomUserEntities = roomUserRepository.findAll(example, Sort.by("entryTime").ascending());
@@ -170,7 +172,7 @@ public class RoomServiceImpl implements IRoomService {
             }
             return null;
         }).filter(Objects::nonNull).collect(Collectors.toList());
-        return ResultTemplate.success(responseVoList);
+        return ResponseTemplate.success(responseVoList);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.fengwenyi.erwinchatroom.listener;
 
-import com.fengwenyi.api.result.ResultTemplate;
+import com.fengwenyi.api.result.ResponseTemplate;
 import com.fengwenyi.erwinchatroom.entity.RoomEntity;
 import com.fengwenyi.erwinchatroom.entity.RoomUserEntity;
 import com.fengwenyi.erwinchatroom.entity.UserEntity;
@@ -13,12 +13,9 @@ import com.fengwenyi.erwinchatroom.service.IMsgService;
 import com.fengwenyi.erwinchatroom.vo.response.BroadcastMessageResponseVo;
 import com.fengwenyi.erwinchatroom.vo.response.ContentResponseVo;
 import com.fengwenyi.javalib.convert.DateTimeUtils;
-import com.fengwenyi.javalib.convert.JsonUtils;
-import com.fengwenyi.javalib.generate.IdUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
-import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectEvent;
@@ -80,6 +77,6 @@ public class WebSocketConnectListener implements ApplicationListener<SessionConn
         broadcastMessageResponseVo.setMessage(contentResponseVo);
         broadcastMessageResponseVo.setTimestamp(System.currentTimeMillis() / 1000);
         broadcastMessageResponseVo.setTimeStr(DateTimeUtils.format(LocalDateTime.now(), "HH:mm"));
-        msgService.sendToRoom(rid, ResultTemplate.success(broadcastMessageResponseVo));
+        msgService.sendToRoom(rid, ResponseTemplate.success(broadcastMessageResponseVo));
     }
 }

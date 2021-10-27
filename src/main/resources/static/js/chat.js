@@ -338,7 +338,7 @@ layui.use(function() {
             if (response.success) {
 
             } else {
-                alertFail(response.msg)
+                alertFail(response.message)
             }
         });
     }
@@ -376,7 +376,7 @@ layui.use(function() {
                 apiUrlConversionQRCodeBase64(inviteUrl);
                 handleSetInviteInfo(roomName, userNickname);
             } else {
-                alertFail(response.msg);
+                alertFail(response.message);
             }
         });
     }
@@ -391,7 +391,7 @@ layui.use(function() {
                 //console.log(imgBase64);
                 jQuery('#inviteQRCodeImg').attr('src', 'data:image/png;base64,' + imgBase64);
             } else {
-                alertFail(response.msg);
+                alertFail(response.message);
             }
         });
     }

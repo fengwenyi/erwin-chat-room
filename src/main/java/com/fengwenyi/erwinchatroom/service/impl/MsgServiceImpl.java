@@ -1,6 +1,6 @@
 package com.fengwenyi.erwinchatroom.service.impl;
 
-import com.fengwenyi.api.result.ResultTemplate;
+import com.fengwenyi.api.result.ResponseTemplate;
 import com.fengwenyi.erwinchatroom.service.IMsgService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -17,17 +17,17 @@ public class MsgServiceImpl implements IMsgService {
     private SimpMessagingTemplate messagingTemplate;
 
     @Override
-    public <T> void sendAll(ResultTemplate<T> resultTemplate) {
+    public <T> void sendAll(ResponseTemplate<T> resultTemplate) {
         messagingTemplate.convertAndSend("/topic/getResponse", resultTemplate);
     }
 
     @Override
-    public <T> void sendToUser(String userId, ResultTemplate<T> resultTemplate) {
+    public <T> void sendToUser(String userId, ResponseTemplate<T> resultTemplate) {
         messagingTemplate.convertAndSendToUser(userId, "/topic/getResponse", resultTemplate);
     }
 
     @Override
-    public <T> void sendToRoom(String rid, ResultTemplate<T> resultTemplate) {
+    public <T> void sendToRoom(String rid, ResponseTemplate<T> resultTemplate) {
         messagingTemplate.convertAndSend("/room/" + rid, resultTemplate);
     }
 }

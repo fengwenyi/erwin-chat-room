@@ -1,6 +1,6 @@
 package com.fengwenyi.erwinchatroom.service.impl;
 
-import com.fengwenyi.api.result.ResultTemplate;
+import com.fengwenyi.api.result.ResponseTemplate;
 import com.fengwenyi.erwinchatroom.entity.UserEntity;
 import com.fengwenyi.erwinchatroom.repository.IUserRepository;
 import com.fengwenyi.erwinchatroom.service.IUserService;
@@ -27,7 +27,7 @@ public class UserServiceImpl implements IUserService {
     private IUserRepository userRepository;
 
     @Override
-    public ResultTemplate<UserInitResponseVo> init(UserInitRequestVo requestVo) {
+    public ResponseTemplate<UserInitResponseVo> init(UserInitRequestVo requestVo) {
 
         String uid = requestVo.getUid();
         if (!StringUtils.hasText(uid)) {
@@ -47,20 +47,20 @@ public class UserServiceImpl implements IUserService {
 
         UserInitResponseVo responseVo = new UserInitResponseVo().setUid(uid);
 
-        return ResultTemplate.success(responseVo);
+        return ResponseTemplate.success(responseVo);
     }
 
     @Override
-    public ResultTemplate<Void> update(UserRequestVo requestVo) {
+    public ResponseTemplate<Void> update(UserRequestVo requestVo) {
         UserEntity userEntity = userRepository.findById(requestVo.getUid()).orElse(null);
         if (Objects.isNull(userEntity)) {
-            return ResultTemplate.fail("用户查询失败");
+            return ResponseTemplate.fail("用户查询失败");
         }
         userRepository.save(
                 userEntity
                         .setNickname(requestVo.getNickname())
                         .setAvatarBgColor(requestVo.getAvatarBgColor())
                         .setUpdateTime(LocalDateTime.now()));
-        return ResultTemplate.success();
+        return ResponseTemplate.success();
     }
 }

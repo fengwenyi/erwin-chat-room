@@ -1,6 +1,6 @@
 package com.fengwenyi.erwinchatroom.server;
 
-import com.fengwenyi.api.result.ResultTemplate;
+import com.fengwenyi.api.result.ResponseTemplate;
 import com.fengwenyi.erwinchatroom.service.IChatService;
 import com.fengwenyi.erwinchatroom.vo.request.ChatMessageRequestVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class ChatServer {
     private IChatService chatService;
 
     @MessageMapping("/room")
-    public ResultTemplate<?> room(ChatMessageRequestVo requestVo) {
+    public ResponseTemplate<?> room(ChatMessageRequestVo requestVo) {
         return chatService.room(requestVo);
     }
 

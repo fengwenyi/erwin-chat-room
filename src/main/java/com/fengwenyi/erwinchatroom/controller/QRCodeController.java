@@ -1,6 +1,6 @@
 package com.fengwenyi.erwinchatroom.controller;
 
-import com.fengwenyi.api.result.ResultTemplate;
+import com.fengwenyi.api.result.ResponseTemplate;
 import com.fengwenyi.erwinchatroom.vo.request.UrlGeneratorQRCodeRequestVo;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
@@ -24,14 +24,14 @@ import java.io.IOException;
 public class QRCodeController {
 
     @PostMapping("generator")
-    public ResultTemplate<String> generator(@RequestBody UrlGeneratorQRCodeRequestVo requestVo) throws WriterException, IOException {
+    public ResponseTemplate<String> generator(@RequestBody UrlGeneratorQRCodeRequestVo requestVo) throws WriterException, IOException {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(requestVo.getUrl(), BarcodeFormat.QR_CODE, 300, 300);
         BufferedImage image = MatrixToImageWriter.toBufferedImage(bitMatrix);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ImageIO.write(image, "png",outputStream);
         String imgBase64 = Base64.encodeBase64String(outputStream.toByteArray());
-        return ResultTemplate.success(imgBase64);
+        return ResponseTemplate.success(imgBase64);
     }
 
 }

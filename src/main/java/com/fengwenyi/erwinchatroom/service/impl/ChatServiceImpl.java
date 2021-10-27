@@ -1,6 +1,6 @@
 package com.fengwenyi.erwinchatroom.service.impl;
 
-import com.fengwenyi.api.result.ResultTemplate;
+import com.fengwenyi.api.result.ResponseTemplate;
 import com.fengwenyi.erwinchatroom.entity.UserEntity;
 import com.fengwenyi.erwinchatroom.repository.IUserRepository;
 import com.fengwenyi.erwinchatroom.service.IChatService;
@@ -10,7 +10,6 @@ import com.fengwenyi.erwinchatroom.vo.response.ChatMessageResponseVo;
 import com.fengwenyi.erwinchatroom.vo.response.ContentResponseVo;
 import com.fengwenyi.erwinchatroom.vo.response.UserResponseVo;
 import com.fengwenyi.javalib.convert.DateTimeUtils;
-import com.fengwenyi.javalib.convert.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +32,7 @@ public class ChatServiceImpl implements IChatService {
     private IUserRepository userRepository;
 
     @Override
-    public ResultTemplate<Void> room(ChatMessageRequestVo requestVo) {
+    public ResponseTemplate<Void> room(ChatMessageRequestVo requestVo) {
 
 //        log.debug("请求参数={}", JsonUtils.convertString(requestVo));
 
@@ -41,7 +40,7 @@ public class ChatServiceImpl implements IChatService {
 
         if (!optionalUser.isPresent()) {
             log.debug("用户查询失败，uid={}", requestVo.getUid());
-            return ResultTemplate.fail("用户查询失败");
+            return ResponseTemplate.fail("用户查询失败");
         }
 
         ChatMessageResponseVo chatMessageResponseVo = new ChatMessageResponseVo();
@@ -62,12 +61,12 @@ public class ChatServiceImpl implements IChatService {
         chatMessageResponseVo.setTimestamp(System.currentTimeMillis() / 1000);
         chatMessageResponseVo.setTimeStr(DateTimeUtils.format(LocalDateTime.now(), "HH:mm"));
 
-        ResultTemplate<?> result = ResultTemplate.success(chatMessageResponseVo);
+        ResponseTemplate<?> result = ResponseTemplate.success(chatMessageResponseVo);
 
 //        log.debug("发送的消息：{}", JsonUtils.convertString(result));
 
         msgService.sendToRoom(requestVo.getRid(), result);
 
-        return ResultTemplate.success();
+        return ResponseTemplate.success();
     }
 }

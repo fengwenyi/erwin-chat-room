@@ -1,6 +1,6 @@
 package com.fengwenyi.erwinchatroom.service;
 
-import com.fengwenyi.api.result.ResultTemplate;
+import com.fengwenyi.api.result.ResponseTemplate;
 import com.fengwenyi.erwinchatroom.vo.request.UserInitRequestVo;
 import com.fengwenyi.erwinchatroom.vo.request.UserRequestVo;
 import com.fengwenyi.erwinchatroom.vo.response.UserInitResponseVo;
@@ -16,12 +16,12 @@ public interface IUserService {
      * @param requestVo
      * @return
      */
-    ResultTemplate<UserInitResponseVo> init(UserInitRequestVo requestVo);
+    ResponseTemplate<UserInitResponseVo> init(UserInitRequestVo requestVo);
 
     /**
      * 更新用户
      * @param requestVo
      * @return
      */
-    ResultTemplate<Void> update(UserRequestVo requestVo);
+    ResponseTemplate<Void> update(UserRequestVo requestVo);
 }

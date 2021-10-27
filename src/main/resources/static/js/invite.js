@@ -68,7 +68,7 @@ layui.use(function () {
                 layer.close(layerIndex);
                 gotoRoom(rid);
             } else {
-                alertFail(layer, response.msg)
+                alertFail(layer, response.message)
             }
         })
     }
