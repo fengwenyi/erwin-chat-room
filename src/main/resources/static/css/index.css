@@ -168,7 +168,7 @@ html {
     position: absolute;
     right: 1rem;
     top: 1rem;
-    color: #c3c3c3;
+    color: #e3e3e3;
     font-size: 1rem;
     font-weight: lighter;
 }
@@ -176,7 +176,7 @@ html {
     position: absolute;
     left: 1rem;
     top: 1rem;
-    color: #c3c3c3;
+    color: #ccc;
     font-size: 1rem;
     font-weight: lighter;
 }
@@ -184,19 +184,20 @@ html {
     position: absolute;
     right: 10px;
     bottom: 10px;
-    color: #c3c3c3;
+    color: #ccc;
     font-size: 1rem;
     font-weight: lighter;
 }
 .room-item .content .info .count {
     margin-left: 0.5rem;
+    font-size: 1.4rem;
 }
 
 .room-item .content .creator {
     position: absolute;
     left: 1rem;
     bottom: 1rem;
-    color: #c3c3c3;
+    color: #e3e3e3;
     font-size: 1rem;
     font-weight: lighter;
 }
