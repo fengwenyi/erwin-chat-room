@@ -1,5 +1,5 @@
 #!/bin/bash
-version=1.1.3
+version=2.0.0
 mvn clean package -DskipTests
 docker build -t fengwenyi/erwin-chat-room:$version .
 docker tag fengwenyi/erwin-chat-room:$version fengwenyi/erwin-chat-room:$version
