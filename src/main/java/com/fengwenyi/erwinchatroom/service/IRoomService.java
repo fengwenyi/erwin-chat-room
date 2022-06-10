@@ -25,7 +25,7 @@ public interface IRoomService {
      * @param pageRequest
      * @return
      */
-    ResponseTemplate<PageResponseVo<List<RoomResponseVo>>> getPage(PageRequestVo<?> pageRequest);
+    ResponseTemplate<PageResponseVo<List<RoomResponseVo>>> getPage(PageRequestVo pageRequest);
 
     /**
      * 根据id查询

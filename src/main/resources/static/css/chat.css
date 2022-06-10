@@ -219,6 +219,17 @@ html, body {
     justify-content: center;
 }
 
+.main-container .right-container .form-container .emoji-box {
+    margin-left: 10px;
+
+}
+
+.main-container .right-container .form-container .emoji-box .layui-icon {
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+}
+
 .layui-form {
     width: 90%;
     height: 100%;

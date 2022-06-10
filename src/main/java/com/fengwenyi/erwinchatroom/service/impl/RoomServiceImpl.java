@@ -81,7 +81,7 @@ public class RoomServiceImpl implements IRoomService {
     }
 
     @Override
-    public ResponseTemplate<PageResponseVo<List<RoomResponseVo>>> getPage(PageRequestVo<?> pageRequestVo) {
+    public ResponseTemplate<PageResponseVo<List<RoomResponseVo>>> getPage(PageRequestVo pageRequestVo) {
         Long currentPage = pageRequestVo.getCurrentPage();
         Integer pageSize = pageRequestVo.getPageSize();
 

@@ -1,5 +1,6 @@
 package com.fengwenyi.erwinchatroom.config;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -16,5 +17,13 @@ import org.springframework.context.annotation.Configuration;
 public class ErwinProperties {
 
     private String domain;
+
+    private App app;
+
+    @Data
+    public static class App {
+        private String name;
+        private String version;
+    }
 
 }

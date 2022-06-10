@@ -40,7 +40,7 @@ public class ViewController {
     private ErwinProperties erwinProperties;
 
     @GetMapping("/")
-    public String index(HttpSession session, HttpServletResponse response) {
+    public String index(HttpSession session, HttpServletResponse response, Model model) {
         session.setMaxInactiveInterval(-1);
 
         // 解决浏览器后退不能自动刷新问题
@@ -48,6 +48,8 @@ public class ViewController {
         response.setHeader("Cache-Control","no-cache");
         response.setDateHeader("Expires", 0);
         response.setHeader("Cache-Control", "no-store");
+
+        model.addAttribute("version", erwinProperties.getApp().getVersion());
 
         return "index";
     }
@@ -98,6 +100,8 @@ public class ViewController {
             model.addAttribute("msg", "非法进入聊天室");
         }
 
+        model.addAttribute("version", erwinProperties.getApp().getVersion());
+
         return "chat";
     }
 
@@ -120,6 +124,9 @@ public class ViewController {
             UserEntity userEntity = optionalUser.get();
             model.addAttribute("userNickname", userEntity.getNickname());
         }
+
+        model.addAttribute("version", erwinProperties.getApp().getVersion());
+
         return "invite";
     }
 

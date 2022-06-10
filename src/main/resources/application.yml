@@ -19,3 +19,8 @@ spring:
     cache: false
   mvc:
     static-path-pattern: /static/**
+
+erwin:
+  app:
+    name: @project.artifactId@
+    version: @project.version@

@@ -2,9 +2,10 @@
 
 ## v1.1.4
 
-2021.12.24
+2021.12.24 ~ 
 
-* 【升级】spring boot 2.6.2
+* 【升级】spring boot 2.7.0
+* 【升级】api-spring-boot-starter 1.3.1
 
 ## v1.1.3
 

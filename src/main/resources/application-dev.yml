@@ -26,4 +26,4 @@ logging:
     com.fengwenyi: debug
 
 erwin:
-  domain: http://localhost:8080
+  domain: http://localhost:9900

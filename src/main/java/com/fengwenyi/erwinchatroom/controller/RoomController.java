@@ -56,7 +56,7 @@ public class RoomController {
     }
 
     @PostMapping("/getPage")
-    public ResponseTemplate<PageResponseVo<List<RoomResponseVo>>> getPage(@RequestBody PageRequestVo<?> pageRequest) {
+    public ResponseTemplate<PageResponseVo<List<RoomResponseVo>>> getPage(@RequestBody PageRequestVo pageRequest) {
         return roomService.getPage(pageRequest);
     }
 

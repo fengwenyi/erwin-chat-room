@@ -13,14 +13,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 
-    <link rel="stylesheet" href="/static/lib/layui/css/layui.css?v=1.1.2">
-    <link rel="stylesheet" href="/static/css/chat.css?v=1.1.2">
-    <script src="/static/lib/layui/layui.js?v=1.1.2"></script>
+    <link rel="stylesheet" th:href="'/static/lib/layui/css/layui.css?v=' + ${version}">
+    <link rel="stylesheet" th:href="'/static/css/chat.css?v=' + ${version}">
+    <script th:src="'/static/lib/layui/layui.js?v=' + ${version}"></script>
 
-    <script src="/static/util/Variable.js?v=1.1.2"></script>
-    <script src="/static/util/Utils.js?v=1.1.2"></script>
-    <script src="/static/util/CacheUtils.js?v=1.1.2"></script>
-    <script src="/static/util/LayerUtils.js?v=1.1.2"></script>
+    <script th:src="'/static/util/Variable.js?v=' + ${version}"></script>
+    <script th:src="'/static/util/Utils.js?v=' + ${version}"></script>
+    <script th:src="'/static/util/CacheUtils.js?v=' + ${version}"></script>
+    <script th:src="'/static/util/LayerUtils.js?v=' + ${version}"></script>
 
     <script th:inline="javascript">
         let error = [[${error}]];
@@ -61,13 +61,14 @@
 
 <!--    <script src="https://cdn.bootcdn.net/ajax/libs/stomp.js/2.3.3/stomp.js"></script>-->
 <!--    <script src="https://cdn.bootcdn.net/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>-->
-    <script src="/static/lib/js/stomp.min.js?v=1.1.2"></script>
-    <script src="/static/lib/js/sockjs.min.js?v=1.1.2"></script>
+    <script th:src="'/static/lib/js/stomp.min.js?v=' + ${version}"></script>
+    <script th:src="'/static/lib/js/sockjs.min.js?v=' + ${version}"></script>
 
-    <script src="/static/util/AjaxUtils.js?v=1.1.2"></script>
-    <script src="/static/js/chat.js?v=1.1.2"></script>
-    <script src="/static/lib/js/html2canvas.min.js?v=1.1.2"></script>
+    <script th:src="'/static/util/AjaxUtils.js?v=' + ${version}"></script>
+    <script th:src="'/static/js/chat.js?v=' + ${version}"></script>
+    <script th:src="'/static/lib/js/html2canvas.min.js?v=' + ${version}"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/bluebird/3.7.2/bluebird.js"></script>
+    <script src="/static/lib/js/jquery.mb.emoticons.js"></script>
 </head>
 <body>
 <header class="header-container">
@@ -200,6 +201,7 @@
         <div class="form-container">
             <form class="layui-form" action="">
                 <input type="text" name="message" required lay-verify="required" autocomplete="off" class="layui-input">
+                <div class="emoji-box"><i class="layui-icon layui-icon-face-smile"></i></div>
                 <button class="layui-btn" lay-submit lay-filter="formSend">发送</button>
             </form>
         </div>
