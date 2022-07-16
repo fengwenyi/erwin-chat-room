@@ -5,7 +5,7 @@
 ```shell
 docker pull fengwenyi/erwin-chat-room
 
-docker run -d -p 8080:8080 --name erwin-chat-room fengwenyi/erwin-chat-room
+docker run -d -p 9900:9900 --name erwin-chat-room fengwenyi/erwin-chat-room
 ```
 
 > http://localhost:9900
@@ -38,7 +38,7 @@ docker pull fengwenyi/erwin-chat-room
 docker run -d -p 9900:9900 --name erwin-chat-room fengwenyi/erwin-chat-room
 
 # 启动命令（指定正式环境）
-docker run -d -v data/log:/data/log data/file:/data/file -e active=prod -p 9900:9900 --name erwin-chat-room fengwenyi/erwin-chat-room
+docker run -d -v /data/log:/data/log -e active=prod -p 9900:9900 --name erwin-chat-room fengwenyi/erwin-chat-room
 
 # 查看日志
 docker logs -f erwin-chat-room
