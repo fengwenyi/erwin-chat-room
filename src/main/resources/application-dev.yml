@@ -24,6 +24,8 @@ spring:
 logging:
   level:
     com.fengwenyi: debug
+  file:
+    path: log
 
 erwin:
   domain: http://localhost:9900

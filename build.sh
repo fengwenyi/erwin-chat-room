@@ -1,8 +1,9 @@
 #!/bin/bash
-version=2.0.0
+version=`awk '/<version>[^<]+<\/version>/{gsub(/<version>|<\/version>/,"",$1);print $1;exit;}' pom.xml`
+echo $version
 mvn clean package -DskipTests
-docker build -t fengwenyi/erwin-chat-room:$version .
-docker tag fengwenyi/erwin-chat-room:$version fengwenyi/erwin-chat-room:$version
-docker push fengwenyi/erwin-chat-room:$version
+docker build -t fengwenyi/erwin-chat-room .
+docker tag fengwenyi/erwin-chat-room fengwenyi/erwin-chat-room
+docker push fengwenyi/erwin-chat-room
 git tag -a $version -m "v$version"
 git push origin $version

@@ -2,10 +2,13 @@
 
 ## v1.1.4
 
-2021.12.24 ~ 
+2021.12.24 ~ 2022.07.16
 
-* 【升级】spring boot 2.7.0
-* 【升级】api-spring-boot-starter 1.3.1
+* 【新增】日志文件
+* 【修复】修复 docker 容器时间不对的问题
+* 【升级】spring boot 2.7.1
+* 【升级】api-spring-boot-starter 1.3.2
+* 【升级】JavaLib 2.1.7
 
 ## v1.1.3
 
