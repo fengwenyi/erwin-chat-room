@@ -6,7 +6,7 @@
 
     <groupId>com.fengwenyi</groupId>
     <artifactId>erwin-chat-room</artifactId>
-    <version>1.1.4</version>
+    <version>1.1.5-SNAPSHOT</version>
     <name>erwin-chat-room</name>
     <description>开源在线聊天室</description>
     <url>https://github.com/fengwenyi/erwin-chat-room</url>
