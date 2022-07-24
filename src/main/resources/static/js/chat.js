@@ -41,31 +41,32 @@ layui.use(function() {
         }
 
         let sock = new SockJS(wsUrl);
+        sock._reconnectTimer = 1
         stompClient = Stomp.over(sock);//使用STMOP子协议的WebSocket客户端
         stompClient.debug = false;
+        stompClient.heartbeat.outgoing = 10000; // client will send heartbeats every 20000ms
+        stompClient.heartbeat.incoming = 0;
         let header = {};
         header.rid = rid;
         header.uid = getUid();
-        stompClient.connect(header, function(frame){//连接WebSocket服务端
-
-            apiGetRoomUserCount();
-            apiGetRoomUsers();
-
-            // 接收房间聊天消息
-            receiverRoomChatMessage();
-
-        }/*, function (err) {
-
-        }*/);
-        //stompClient.retry(false)
+        stompClient.connect(header, connCallback, errCallBack());
+        // stompClient.retry(false)
     }
 
-    function errorCallBack (error) {
+    function connCallback(frame) { //连接WebSocket服务端
+        apiGetRoomUserCount();
+        apiGetRoomUsers();
+
+        // 接收房间聊天消息
+        receiverRoomChatMessage();
+    }
+
+    function errCallBack(error) {
         // 连接失败时（服务器响应 ERROR 帧）的回调方法
-        document.getElementById("state-info").innerHTML = "连接失败";
+        // document.getElementById("state-info").innerHTML = "连接失败";
         console.log('连接失败【' + error + '】');
-        //return false;
-        return true;
+        return false;
+        // return true;
     }
 
     //监听提交

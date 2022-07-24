@@ -65,7 +65,9 @@ public class WebSocketDisconnectListener implements ApplicationListener<SessionD
         Optional<RoomEntity> optionalRoom = roomRepository.findById(rid);
         if (optionalRoom.isPresent()) {
             RoomEntity roomEntity = optionalRoom.get();
-            roomRepository.save(roomEntity.setUserCount(roomEntity.getUserCount() - 1));
+            if (roomEntity.getUserCount() > 0) {
+                roomRepository.save(roomEntity.setUserCount(roomEntity.getUserCount() - 1));
+            }
         }
 
         roomUserRepository.deleteById(sessionId);

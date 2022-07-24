@@ -52,13 +52,15 @@ public class ChatRoomInterceptor implements HandshakeInterceptor {
 
         Optional<UserEntity> optionalUser = userRepository.findById(uid);
         if (!optionalUser.isPresent()) {
-            Asserts.fail("用户ID不正确");
+            // Asserts.fail("用户ID不正确");
+            //log.error("用户ID不正确");
             return false;
         }
 
         Optional<RoomEntity> optionalRoom = roomRepository.findById(rid);
         if (!optionalRoom.isPresent()) {
-            Asserts.fail("房间ID不正确");
+            // Asserts.fail("房间ID不正确");
+            //log.error("房间ID不正确");
             return false;
         }
 
@@ -68,11 +70,13 @@ public class ChatRoomInterceptor implements HandshakeInterceptor {
                 if (StringUtils.hasText(token)) {
                     String authToken = (String) cache.getIfPresent(CacheKeyUtils.genRoomUserAuthKey(rid, uid));
                     if (!token.equals(authToken)) {
-                        Asserts.fail("房间认证失败");
+                        // Asserts.fail("房间认证失败");
+                        //log.error("房间认证失败");
                         return false;
                     }
                 } else {
-                    Asserts.fail("房间需要认证");
+                    // Asserts.fail("房间需要认证");
+                    //log.error("房间需要认证");
                     return false;
                 }
             }
