@@ -1,12 +1,12 @@
 
 server:
-  port: 9900
+  port: 80
 
 spring:
   application:
     name: erwin-chat-room
   profiles:
-    active: dev
+    active: prod
 
   thymeleaf:
     enabled: true
