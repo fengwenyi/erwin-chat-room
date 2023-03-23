@@ -20,7 +20,11 @@ spring:
   mvc:
     static-path-pattern: /static/**
 
+#erwin:
+#  app:
+#    name: @project.artifactId@
+#    version: @project.version@
 erwin:
   app:
-    name: @project.artifactId@
-    version: @project.version@
+    name: erwin-chat-room
+    version: 1.1.5
