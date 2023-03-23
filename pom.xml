@@ -19,7 +19,7 @@
     </parent>
 
     <properties>
-        <java.version>17</java.version>
+        <java.version>1.8</java.version>
         <spring-boot.version>2.7.1</spring-boot.version>
         <api-spring-boot-starter.version>1.3.2</api-spring-boot-starter.version>
         <JavaLib.version>2.1.7</JavaLib.version>
@@ -127,9 +127,17 @@
                 </configuration>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
 
-    <repositories>
+    <!--<repositories>
         <repository>
             <id>nexus-aliyun</id>
             <name>Nexus aliyun</name>
@@ -140,6 +148,6 @@
             <name>Nexus aliyun Central</name>
             <url>https://maven.aliyun.com/repository/central</url>
         </repository>
-    </repositories>
+    </repositories>-->
 
 </project>
